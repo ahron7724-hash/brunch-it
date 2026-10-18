@@ -31,12 +31,6 @@
   transform: scale(1);
 }
 
-.shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, var(--color-overlay), var(--color-overlay-soft) 55%, transparent);
-}
-
 .content { position: relative; }
 
 .controls {

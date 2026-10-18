@@ -52,13 +52,13 @@ export function HeroSlider({ slides, children }: HeroSliderProps) {
               alt=""
               fill
               sizes="100vw"
+              quality={90}
               preload={index === 0}
               className={clsx(styles.slide, index === active && styles.active)}
             />
           )
         )}
       </div>
-      <div className={styles.shade} />
       <div className={clsx("container", styles.content)}>{children}</div>
 
       {canRotate && (
