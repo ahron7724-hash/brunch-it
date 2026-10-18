@@ -154,3 +154,7 @@ update public.pages set
   body_text = E'## סוג הכשרות\n\nכל המוצרים כשרים חלבי, חלב ישראל, בהשגחת הרבנות המקומית.\n\n## הנחיות\n\nמוצרים המסומנים "פרווה" מיוצרים על כלים פרווה ואינם מכילים מוצרי חלב.\n\nהמוצרים אינם מתאימים לפסח.',
   extra = '{"certificateUrl": "/demo/kashrut-certificate.webp", "supervision": "רבנות מקומית – כשר חלבי, חלב ישראל", "validUntil": "2027-03-31"}'::jsonb
 where slug = 'kashrut';
+
+
+
+-- בדיקה
