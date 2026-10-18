@@ -1,0 +1,45 @@
+.big { font-size: var(--text-lg); }
+
+.notes {
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.itemTitle { font-weight: var(--weight-medium); }
+
+.meta {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.inscription {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent);
+}
+
+.num { flex: none; font-variant-numeric: tabular-nums; }
+
+.totals {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  & div { display: flex; justify-content: space-between; }
+  & dd { margin: 0; font-variant-numeric: tabular-nums; }
+}
+
+.total { font-size: var(--text-xl); }

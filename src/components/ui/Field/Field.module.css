@@ -1,0 +1,39 @@
+.field {
+  display: flex;
+  flex: 1 1 auto;
+  min-inline-size: min(14rem, 100%);
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.optional {
+  font-weight: var(--weight-regular);
+  color: var(--color-text-muted);
+}
+
+.input {
+  min-block-size: var(--tap-target);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-bg);
+
+  &:focus-visible { border-color: var(--color-text); }
+}
+
+.inputError { border-color: var(--color-error); }
+
+.error {
+  font-size: var(--text-sm);
+  color: var(--color-error);
+}
+
+.hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}

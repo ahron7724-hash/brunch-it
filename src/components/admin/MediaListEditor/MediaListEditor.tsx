@@ -1,0 +1,108 @@
+"use client";
+
+import { ArrowDown, ArrowUp } from "lucide-react";
+import Image from "next/image";
+import { useState, useTransition } from "react";
+
+import { addMedia, deleteMedia, saveMediaOrder, type MediaListName } from "@/app/admin/(panel)/media/actions";
+import { DeleteButton } from "@/components/admin/DeleteButton/DeleteButton";
+import { ImageUploader } from "@/components/admin/ImageUploader/ImageUploader";
+import { Button } from "@/components/ui/Button/Button";
+import type { UploadFolder } from "@/lib/admin/uploadImage";
+
+import styles from "./MediaListEditor.module.css";
+
+export type MediaItem = { id: string; url: string; alt: string; caption?: string; isVideo?: boolean };
+
+type MediaListEditorProps = {
+  list: MediaListName;
+  items: MediaItem[];
+  folder: UploadFolder;
+  max: number;
+  allowVideo?: boolean;
+  withCaption?: boolean;
+};
+
+/** Ordered list of images (hero slides, strips, gallery): upload, describe, reorder, delete. */
+export function MediaListEditor({ list, items: initial, folder, max, allowVideo = false, withCaption = false }: MediaListEditorProps) {
+  const [items, setItems] = useState(initial);
+  const [syncedFrom, setSyncedFrom] = useState(initial);
+  const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
+  const [isPending, startTransition] = useTransition();
+  if (syncedFrom !== initial) {
+    setSyncedFrom(initial);
+    setItems(initial);
+  }
+
+  const edit = (id: string, field: "alt" | "caption", value: string) =>
+    setItems((all) => all.map((item) => (item.id === id ? { ...item, [field]: value } : item)));
+  const move = (index: number, delta: number) =>
+    setItems((all) => {
+      const next = [...all];
+      const [item] = next.splice(index, 1);
+      if (item) next.splice(index + delta, 0, item);
+      return next;
+    });
+
+  return (
+    <div className={styles.editor}>
+      <ul role="list" className={styles.grid}>
+        {items.map((item, index) => (
+          <li key={item.id} className={styles.card}>
+            <div className={styles.thumb}>
+              {item.isVideo ? <span className={styles.video}>סרטון</span> : <Image src={item.url} alt="" fill sizes="10rem" className={styles.image} />}
+            </div>
+            <input aria-label="תיאור קצר (לנגישות)" placeholder="תיאור קצר" value={item.alt} maxLength={200} onChange={(e) => edit(item.id, "alt", e.target.value)} className={styles.input} />
+            {withCaption && (
+              <input aria-label="כיתוב מתחת לתמונה" placeholder="כיתוב (למשל: בת מצווה)" value={item.caption ?? ""} maxLength={200} onChange={(e) => edit(item.id, "caption", e.target.value)} className={styles.input} />
+            )}
+            <div className={styles.controls}>
+              <button type="button" onClick={() => move(index, -1)} disabled={index === 0} aria-label="הקדמה" className={styles.iconButton}>
+                <ArrowUp size={14} strokeWidth={1.25} aria-hidden="true" />
+              </button>
+              <button type="button" onClick={() => move(index, 1)} disabled={index === items.length - 1} aria-label="איחור" className={styles.iconButton}>
+                <ArrowDown size={14} strokeWidth={1.25} aria-hidden="true" />
+              </button>
+              <DeleteButton onDelete={() => deleteMedia(list, item.id)} confirmText="למחוק?" />
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <div className={styles.footer}>
+        {items.length < max ? (
+          <ImageUploader
+            folder={folder}
+            allowVideo={allowVideo}
+            label={`הוספה (${items.length}/${max})`}
+            onUploaded={async (url) => {
+              const result = await addMedia(list, url, "");
+              setMessage(result.ok ? null : { ok: false, text: result.message });
+            }}
+          />
+        ) : (
+          <p className={styles.note}>הגעת למקסימום ({max}).</p>
+        )}
+        {items.length > 0 && (
+          <Button
+            variant="line"
+            disabled={isPending}
+            onClick={() =>
+              startTransition(async () => {
+                const result = await saveMediaOrder(list, items.map((i) => ({ id: i.id, alt: i.alt, caption: i.caption })));
+                setMessage({ ok: result.ok, text: result.ok ? "הסדר והתיאורים נשמרו" : result.message });
+              })
+            }
+          >
+            שמירת סדר ותיאורים
+          </Button>
+        )}
+      </div>
+      {message && (
+        <p role={message.ok ? "status" : "alert"} className={message.ok ? styles.success : styles.error}>
+          {message.text}
+        </p>
+      )}
+    </div>
+  );
+}

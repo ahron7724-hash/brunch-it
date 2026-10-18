@@ -1,0 +1,38 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.label { font-size: var(--text-sm); font-weight: var(--weight-semibold); }
+
+.input {
+  min-block-size: var(--tap-target);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-bg);
+
+  &:focus-visible { border-color: var(--color-text); }
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.success { font-size: var(--text-sm); color: var(--color-success); }
+
+.error { font-size: var(--text-sm); color: var(--color-error); }
+
+@media print {
+  .form { display: none; }
+}

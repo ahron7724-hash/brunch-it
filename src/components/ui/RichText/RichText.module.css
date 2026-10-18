@@ -1,0 +1,17 @@
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-inline-size: 42rem;
+  color: var(--color-text-muted);
+
+  & p { white-space: pre-line; }
+}
+
+.heading {
+  margin-block-start: var(--space-4);
+  font-size: var(--text-2xl);
+  color: var(--color-text);
+
+  &:first-child { margin-block-start: 0; }
+}

@@ -1,0 +1,77 @@
+/* grid: gallery tiles must keep equal widths in every row, including a partial last row. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6) var(--space-4);
+}
+
+@media (min-width: 64em) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-8); }
+}
+
+.tile {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 4 / 5;
+  max-inline-size: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: var(--color-surface);
+  cursor: zoom-in;
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 600ms var(--ease);
+}
+
+.tile:hover .image { transform: scale(1.03); }
+
+.caption {
+  margin-block-start: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.viewer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.large {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  max-inline-size: 100%;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.largeImage { object-fit: contain; }
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--tap-target);
+  min-block-size: var(--tap-target);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: none;
+
+  &:hover { border-color: var(--color-text); }
+}
+
+.count { min-inline-size: var(--space-12); text-align: center; }

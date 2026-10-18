@@ -1,0 +1,21 @@
+/* grid: product cards must keep equal widths in every row, including a partial last row;
+   flex-wrap would stretch the last row's cards. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-10) var(--space-4);
+}
+
+@media (min-width: 64em) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-12) var(--space-8);
+  }
+}
+
+.item { min-inline-size: 0; }
+
+.empty {
+  padding-block: var(--space-12);
+  color: var(--color-text-muted);
+}

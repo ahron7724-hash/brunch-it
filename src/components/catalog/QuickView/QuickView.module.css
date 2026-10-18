@@ -1,0 +1,70 @@
+/* The card decides when this is visible (on hover / always on touch screens). */
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  inline-size: 100%;
+  min-block-size: var(--tap-target);
+  padding-inline: var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+  border: 0;
+  border-radius: var(--radius-button);
+  background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+
+  &:hover { background: var(--color-bg); }
+}
+
+@media (hover: none) {
+  .trigger span { display: none; }
+}
+
+.status {
+  padding-block: var(--space-10);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.gallery { flex: 1 1 18rem; min-inline-size: 0; }
+
+.info {
+  display: flex;
+  flex: 1 1 20rem;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-inline-size: 0;
+}
+
+.diet {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent);
+}
+
+.price {
+  font-size: var(--text-xl);
+  font-variant-numeric: tabular-nums;
+}
+
+.serves { font-size: var(--text-md); color: var(--color-text-muted); }
+
+.description { color: var(--color-text-muted); }
+
+.lead { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+.fullLink {
+  align-self: flex-start;
+  padding-block-end: var(--space-1);
+  font-size: var(--text-md);
+  border-block-end: 1px solid var(--color-accent);
+
+  &:hover { color: var(--color-accent); }
+}

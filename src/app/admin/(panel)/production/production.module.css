@@ -1,0 +1,71 @@
+.empty {
+  margin-block-end: var(--space-6);
+  padding: var(--space-8);
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+}
+
+.days {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  break-inside: avoid;
+}
+
+.dayTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding-block-end: var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  border-block-end: 1px solid var(--color-text);
+}
+
+.total {
+  font-size: var(--text-base);
+  font-weight: var(--weight-regular);
+  color: var(--color-accent);
+}
+
+.products {
+  display: flex;
+  flex-direction: column;
+}
+
+.product {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-block: var(--space-2);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.productLine {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.flavors { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+.num { font-variant-numeric: tabular-nums; }
+
+.meta { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+.notice {
+  margin-block-end: var(--space-6);
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--text-sm);
+  background: var(--color-bg);
+  border-inline-start: 2px solid var(--color-accent);
+
+  & a { border-block-end: 1px solid var(--color-accent); }
+}

@@ -1,0 +1,148 @@
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.noteField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-inline-size: 28rem;
+}
+
+.noteLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.noteInput {
+  min-block-size: var(--tap-target);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+}
+
+.monthBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-inline-size: 42rem;
+}
+
+.monthName { font-size: var(--text-lg); font-weight: var(--weight-medium); }
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--tap-target);
+  min-block-size: var(--tap-target);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-bg);
+
+  &:disabled { color: var(--color-border); cursor: not-allowed; }
+}
+
+/* grid: a calendar needs days aligned in weekday columns across all weeks. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--space-1);
+  max-inline-size: 42rem;
+}
+
+.weekday {
+  padding-block-end: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-1);
+  min-block-size: 4.5rem;
+  padding: var(--space-2);
+  font: inherit;
+  text-align: start;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-bg);
+  cursor: pointer;
+
+  &:hover:not(:disabled) { border-color: var(--color-text); }
+}
+
+.number {
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.orders {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent);
+}
+
+.tag {
+  font-size: var(--text-xs);
+  line-height: 1.2;
+}
+
+.dayBlocked {
+  color: var(--color-error);
+  border-color: var(--color-error);
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--color-error) 8%, var(--color-bg)) 0 6px,
+    var(--color-bg) 6px 12px
+  );
+}
+
+.dayCustom {
+  border-color: var(--color-accent);
+  box-shadow: inset 0 0 0 1px var(--color-accent);
+}
+
+.dayAuto {
+  color: var(--color-text-muted);
+  border-color: transparent;
+  background: transparent;
+  cursor: default;
+  opacity: 0.6;
+}
+
+.dayBusy { opacity: 0.5; cursor: wait; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+
+  & li { display: flex; align-items: center; gap: var(--space-2); }
+}
+
+.swatch {
+  display: inline-block;
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  border: 1px solid var(--color-border);
+}
+
+.swatchOpen { background: var(--color-bg); }
+.swatchBlocked { border-color: var(--color-error); background: color-mix(in srgb, var(--color-error) 15%, var(--color-bg)); }
+.swatchCustom { border-color: var(--color-accent); }
+.swatchAuto { border-color: transparent; background: var(--color-surface); }
+
+.success { font-size: var(--text-sm); color: var(--color-success); }
+
+.error { font-size: var(--text-sm); color: var(--color-error); }

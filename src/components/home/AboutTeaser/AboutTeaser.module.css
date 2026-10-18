@@ -1,0 +1,45 @@
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-10) var(--space-24);
+}
+
+.imageWrap {
+  position: relative;
+  flex: 1.1 1 20rem;
+  aspect-ratio: 4 / 5;
+  max-inline-size: 100%;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.image { object-fit: cover; }
+
+.copy {
+  display: flex;
+  flex: 1 1 20rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+  min-inline-size: 0;
+  max-inline-size: 32rem;
+}
+
+.intro { color: var(--color-text-muted); }
+
+.kosher {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  align-self: stretch;
+  padding-block: var(--space-4);
+  font-size: var(--text-md);
+  border-block: 1px solid var(--color-border);
+}
+
+.kosherLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent);
+}

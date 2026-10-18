@@ -1,0 +1,42 @@
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-inline-size: 0;
+}
+
+.main {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  max-inline-size: 100%;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.image { object-fit: cover; }
+
+.thumbs {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.thumb {
+  position: relative;
+  display: block;
+  inline-size: 5.5rem;
+  aspect-ratio: 4 / 5;
+  max-inline-size: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid transparent;
+  background: var(--color-surface);
+  opacity: 0.6;
+  transition: opacity var(--duration) var(--ease);
+
+  &:hover { opacity: 1; }
+}
+
+.thumbActive {
+  border-color: var(--color-text);
+  opacity: 1;
+}

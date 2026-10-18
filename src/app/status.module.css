@@ -1,0 +1,11 @@
+.status {
+  --stack-gap: var(--space-6);
+
+  align-items: center;
+  padding-block: var(--space-24);
+  text-align: center;
+}
+
+.title { font-size: var(--text-3xl); }
+
+.text { color: var(--color-text-muted); }

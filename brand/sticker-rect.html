@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="he"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Heebo:wght@500&display=block" rel="stylesheet">
+<style>
+@page { size: 95mm 20mm; margin: 0 }
+html,body{margin:0;padding:0;background:#fff}
+svg{display:block;width:950px;height:200px}
+@media print { svg{width:95mm;height:20mm} }
+</style></head><body>
+<svg viewBox="0 0 950 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e9c9bf"/>
+      <stop offset=".3" stop-color="#c98f86"/>
+      <stop offset=".55" stop-color="#f0d5cc"/>
+      <stop offset=".8" stop-color="#b8766f"/>
+      <stop offset="1" stop-color="#8e5754"/>
+    </linearGradient>
+    <linearGradient id="rgText" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c98f86"/>
+      <stop offset=".35" stop-color="#e6bdb2"/>
+      <stop offset=".6" stop-color="#c2847c"/>
+      <stop offset="1" stop-color="#a86a64"/>
+    </linearGradient>
+  </defs>
+  <rect width="950" height="200" fill="#ffffff"/>
+
+  <!-- frame in the style of the round logo: open outer + inner lines -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="miter">
+    <path d="M12 118 V12 H938 V188 H96" stroke="url(#rg)" stroke-width="3"/>
+    <path d="M74 25 H925 V175 H25 V104" stroke="url(#rg)" stroke-width="1.2"/>
+    <path d="M12 146 V166" stroke="#c98f86" stroke-width="1.6"/>
+  </g>
+
+  <!-- title -->
+  <g transform="translate(75,-321) scale(0.8)">
+    <text x="506.5" y="535" text-anchor="middle" fill="url(#rgText)"
+      font-family="Montserrat" font-weight="500" font-size="92" letter-spacing="22">BRUNCH<tspan dx="34">IT</tspan></text>
+    <text x="500" y="592" text-anchor="middle" direction="rtl" fill="#b37b74"
+      font-family="Heebo" font-weight="500" font-size="40" letter-spacing="1">מגשי אירוח ופינגר פוד חלבי</text>
+  </g>
+</svg>
+</body></html>

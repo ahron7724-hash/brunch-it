@@ -1,0 +1,26 @@
+.wrap {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.select {
+  min-block-size: var(--tap-target);
+  padding-inline: var(--space-3);
+  font-size: var(--text-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-bg);
+}
+
+/* Status shown in form as well as color: a colored edge on the select. */
+.status_new { border-inline-start: 3px solid var(--color-accent); font-weight: var(--weight-semibold); }
+.status_confirmed { border-inline-start: 3px solid var(--color-text); }
+.status_ready { border-inline-start: 3px solid var(--color-success); }
+.status_collected { color: var(--color-text-muted); }
+.status_cancelled { color: var(--color-error); text-decoration: line-through; }
+
+.error {
+  font-size: var(--text-xs);
+  color: var(--color-error);
+}

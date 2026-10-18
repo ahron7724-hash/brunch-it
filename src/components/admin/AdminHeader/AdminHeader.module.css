@@ -1,0 +1,35 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-block-end: var(--space-8);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+
+.back {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+
+  &:hover { color: var(--color-text); }
+}
+
+.title {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-light);
+}
+
+.description { color: var(--color-text-muted); }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}

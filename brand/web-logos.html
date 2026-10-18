@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="he"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Heebo:wght@500&display=block" rel="stylesheet">
+<style>html,body{margin:0;padding:0;background:transparent}svg{display:block}</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#e9c9bf"/><stop offset=".3" stop-color="#c98f86"/><stop offset=".55" stop-color="#f0d5cc"/><stop offset=".8" stop-color="#b8766f"/><stop offset="1" stop-color="#8e5754"/>
+  </linearGradient>
+  <linearGradient id="rgText" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#c98f86"/><stop offset=".35" stop-color="#e6bdb2"/><stop offset=".6" stop-color="#c2847c"/><stop offset="1" stop-color="#a86a64"/>
+  </linearGradient>
+</defs></svg>
+<div id="out"></div>
+<script>
+const title = (fill='url(#rgText)') => `<text x="506.5" y="535" text-anchor="middle" fill="${fill}" font-family="Montserrat" font-weight="500" font-size="92" letter-spacing="22">BRUNCH<tspan dx="34">IT</tspan></text>`;
+const sub = (y, size, fill='#b37b74') => `<text x="500" y="${y}" text-anchor="middle" direction="rtl" fill="${fill}" font-family="Heebo" font-weight="500" font-size="${size}" letter-spacing="1">מגשי אירוח ופינגר פוד חלבי</text>`;
+const rings = `
+  <circle cx="500" cy="500" r="440" fill="none" stroke="url(#rg)" stroke-width="6" stroke-linecap="round" pathLength="360" stroke-dasharray="318 42" transform="rotate(158 500 500)"/>
+  <circle cx="500" cy="500" r="414" fill="none" stroke="url(#rg)" stroke-width="2.5" stroke-linecap="round" pathLength="360" stroke-dasharray="300 60" transform="rotate(195 500 500)"/>
+  <circle cx="500" cy="500" r="440" fill="none" stroke="url(#rg)" stroke-width="3" stroke-linecap="round" pathLength="360" stroke-dasharray="14 346" transform="rotate(130 500 500)"/>`;
+const V = {
+  // header wordmark: tight crop, transparent
+  horizontal: [720, 160, `<svg viewBox="140 455 720 160" width="720" height="160">${title()}${sub(600, 42)}</svg>`],
+  // round logo without the white disc, for the dark footer
+  round: [1000, 1000, `<svg viewBox="0 0 1000 1000" width="1000" height="1000">${rings}${title()}${sub(612, 36, '#d3a59d')}</svg>`],
+  // browser tab / home-screen icon
+  icon: [512, 512, `<svg viewBox="0 0 1000 1000" width="512" height="512">
+    <circle cx="500" cy="500" r="490" fill="#ffffff"/>
+    <circle cx="500" cy="500" r="420" fill="none" stroke="url(#rg)" stroke-width="44" stroke-linecap="round" pathLength="360" stroke-dasharray="320 40" transform="rotate(158 500 500)"/>
+    <text x="522" y="628" text-anchor="middle" fill="url(#rgText)" font-family="Montserrat" font-weight="500" font-size="370" letter-spacing="44">BI</text></svg>`],
+  // link preview (WhatsApp / Facebook)
+  og: [1200, 630, `<svg viewBox="0 0 1200 630" width="1200" height="630">
+    <rect width="1200" height="630" fill="#fbf7f5"/>
+    <g transform="translate(330,45) scale(0.54)"><circle cx="500" cy="500" r="497" fill="#ffffff"/>${rings}${title()}${sub(612, 36)}</g></svg>`],
+};
+const [w, h, svg] = V[location.hash.slice(1)];
+document.getElementById('out').innerHTML = svg;
+</script></body></html>

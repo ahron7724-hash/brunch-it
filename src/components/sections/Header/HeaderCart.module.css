@@ -1,0 +1,13 @@
+.cart {
+  min-block-size: var(--tap-target);
+  font-size: var(--text-md);
+  border: 0;
+  background: none;
+
+  &:hover { color: var(--color-accent); }
+}
+
+.count {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent);
+}

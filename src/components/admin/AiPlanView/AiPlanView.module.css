@@ -1,0 +1,107 @@
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.warnings {
+  padding: var(--space-4);
+  font-size: var(--text-sm);
+  border-inline-start: 2px solid var(--color-error);
+  background: color-mix(in srgb, var(--color-error) 6%, var(--color-bg));
+
+  & ul { display: flex; flex-direction: column; gap: var(--space-1); }
+}
+
+.warningsTitle { margin-block-end: var(--space-2); font-weight: var(--weight-semibold); color: var(--color-error); }
+
+.day {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  break-inside: avoid;
+}
+
+.dayTitle {
+  padding-block-end: var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  border-block-end: 1px solid var(--color-text);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  margin-block-start: var(--space-2);
+}
+
+.groupTitle {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+}
+
+.tasks {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  list-style: none;
+}
+
+.task {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-block: var(--space-3);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.taskHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.time {
+  padding-inline: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+.details { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+.batches {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-inline-start: var(--space-4);
+  border-inline-start: 1px solid var(--color-accent);
+}
+
+.batch {
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+
+  & summary { cursor: pointer; }
+}
+
+.batchDetail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-block: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.notes {
+  padding: var(--space-4);
+  font-size: var(--text-sm);
+  background: var(--color-surface);
+
+  & ul { display: flex; flex-direction: column; gap: var(--space-1); }
+}
+
+.notesTitle { margin-block-end: var(--space-2); font-weight: var(--weight-semibold); }

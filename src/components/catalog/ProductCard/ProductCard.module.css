@@ -1,0 +1,73 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-inline-size: 0;
+}
+
+
+
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.diet {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent);
+}
+
+.title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-regular);
+
+  & a:hover { color: var(--color-accent); }
+}
+
+.meta {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.price {
+  margin-block-start: var(--space-1);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.from {
+  margin-inline-end: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-muted);
+}
+
+/* Quick view: slides in over the image on hover / keyboard focus; a small icon on touch screens. */
+.quickView {
+  position: absolute;
+  inset-inline: var(--space-3);
+  inset-block-end: var(--space-3);
+  opacity: 0;
+  transform: translateY(var(--space-2));
+  transition:
+    opacity var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
+}
+
+.card:hover .quickView,
+.quickView:focus-within {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: none) {
+  .quickView {
+    inset-inline: auto var(--space-2);
+    inset-block-end: var(--space-2);
+    opacity: 1;
+    transform: none;
+  }
+}

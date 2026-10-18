@@ -1,0 +1,12 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.success {
+  padding: var(--space-4);
+  font-size: var(--text-md);
+  border-inline-start: 2px solid var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 6%, var(--color-bg));
+}

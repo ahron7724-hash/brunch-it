@@ -1,0 +1,2 @@
+/* The section after categories sits close to it, since they read as one catalog block. */
+.featured { padding-block-start: 0; }

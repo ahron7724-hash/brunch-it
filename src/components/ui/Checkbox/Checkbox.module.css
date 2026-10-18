@@ -1,0 +1,14 @@
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--tap-target);
+  font-size: var(--text-md);
+  cursor: pointer;
+}
+
+.box {
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  accent-color: var(--color-primary);
+}

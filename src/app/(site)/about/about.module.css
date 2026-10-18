@@ -1,0 +1,10 @@
+.story {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-10);
+}
+
+.gallery {
+  padding-block-start: 0;
+}

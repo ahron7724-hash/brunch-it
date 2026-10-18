@@ -1,0 +1,31 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.field { display: flex; flex-direction: column; }
+
+.textarea {
+  inline-size: 100%;
+  padding: var(--space-3);
+  font: inherit;
+  line-height: 1.7;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-bg);
+  resize: vertical;
+
+  &:focus-visible { border-color: var(--color-text); }
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.success { font-size: var(--text-sm); color: var(--color-success); }
+
+.error { font-size: var(--text-sm); color: var(--color-error); }

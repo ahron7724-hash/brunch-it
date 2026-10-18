@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="he"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Heebo:wght@400;500&display=block" rel="stylesheet">
+<style>
+@page { size: 100mm 100mm; margin: 0 }
+html,body{margin:0;padding:0;background:transparent}
+svg{display:block;width:1000px;height:1000px}
+@media print { svg{width:100mm;height:100mm} }
+</style></head><body>
+<svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e9c9bf"/>
+      <stop offset=".3" stop-color="#c98f86"/>
+      <stop offset=".55" stop-color="#f0d5cc"/>
+      <stop offset=".8" stop-color="#b8766f"/>
+      <stop offset="1" stop-color="#8e5754"/>
+    </linearGradient>
+    <linearGradient id="rgText" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c98f86"/>
+      <stop offset=".35" stop-color="#e6bdb2"/>
+      <stop offset=".6" stop-color="#c2847c"/>
+      <stop offset="1" stop-color="#a86a64"/>
+    </linearGradient>
+  </defs>
+  <circle cx="500" cy="500" r="497" fill="#ffffff"/>
+  <!-- outer ring, gap at lower-left -->
+  <circle cx="500" cy="500" r="440" fill="none" stroke="url(#rg)" stroke-width="6"
+    stroke-linecap="round" pathLength="360" stroke-dasharray="318 42" transform="rotate(158 500 500)"/>
+  <!-- inner ring, gap at left -->
+  <circle cx="500" cy="500" r="414" fill="none" stroke="url(#rg)" stroke-width="2.5"
+    stroke-linecap="round" pathLength="360" stroke-dasharray="300 60" transform="rotate(195 500 500)"/>
+  <!-- short accent arc inside the outer gap -->
+  <circle cx="500" cy="500" r="440" fill="none" stroke="url(#rg)" stroke-width="3"
+    stroke-linecap="round" pathLength="360" stroke-dasharray="14 346" transform="rotate(130 500 500)"/>
+  <text x="506.5" y="535" text-anchor="middle" fill="url(#rgText)"
+    font-family="Montserrat" font-weight="500" font-size="92" letter-spacing="22">BRUNCH<tspan dx="34">IT</tspan></text>
+  <text x="500" y="612" text-anchor="middle" direction="rtl" fill="#b37b74"
+    font-family="Heebo" font-weight="500" font-size="36" letter-spacing="1">מגשי אירוח ופינגר פוד חלבי</text>
+</svg>
+</body></html>

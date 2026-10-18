@@ -1,0 +1,83 @@
+.strips {
+  --tile-w: 14.5rem;
+  --tile-h: 18rem;
+  --tile-gap: var(--space-4);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--tile-gap);
+  padding-block: var(--space-4);
+}
+
+@media (min-width: 40em) {
+  .strips { --tile-w: 19rem; --tile-h: 24rem; }
+}
+
+@media (min-width: 64em) {
+  .strips { --tile-w: 24rem; --tile-h: 30rem; }
+}
+
+/* The strips scroll physically (left/right on screen), independent of the page's RTL direction. */
+.strip {
+  overflow: hidden;
+  direction: ltr;
+}
+
+.track {
+  display: flex;
+  gap: var(--tile-gap);
+  inline-size: max-content;
+  animation: slide-left 80s linear infinite;
+}
+
+.reverse { animation-name: slide-right; }
+
+.strip:hover .track,
+.paused .track {
+  animation-play-state: paused;
+}
+
+.tile {
+  position: relative;
+  flex: none;
+  inline-size: var(--tile-w);
+  block-size: var(--tile-h);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.image { object-fit: cover; }
+
+/* Moving by 50% + half a gap shifts the track by exactly one copy of the list. */
+@keyframes slide-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - var(--tile-gap) / 2)); }
+}
+
+@keyframes slide-right {
+  from { transform: translateX(calc(-50% - var(--tile-gap) / 2)); }
+  to { transform: translateX(0); }
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pause {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--tap-target);
+  min-block-size: var(--tap-target);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: transparent;
+
+  &:hover { color: var(--color-text); border-color: var(--color-text); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track { animation: none; }
+}

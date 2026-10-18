@@ -1,0 +1,36 @@
+.uploader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  min-block-size: var(--tap-target);
+  padding-inline: var(--space-6);
+  font-size: var(--text-md);
+  border: 1px dashed var(--color-text-muted);
+  border-radius: var(--radius-button);
+  cursor: pointer;
+
+  &:hover { border-color: var(--color-text); }
+
+  &[aria-disabled="true"] {
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+  }
+}
+
+input:focus-visible + .button,
+.uploader:focus-within .button {
+  outline: 1px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.error {
+  font-size: var(--text-sm);
+  color: var(--color-error);
+}

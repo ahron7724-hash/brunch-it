@@ -1,0 +1,54 @@
+/* Sits above the card's full-size link, so these buttons stay clickable. */
+.actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.edit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--tap-target);
+  padding-inline: var(--space-5);
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-button);
+  background: var(--color-primary);
+
+  &:hover { background: var(--color-primary-hover); }
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--tap-target);
+  min-block-size: var(--tap-target);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-bg);
+
+  &:hover { border-color: var(--color-text); }
+  &:disabled { opacity: 0.5; cursor: wait; }
+}
+
+.error {
+  max-inline-size: 16rem;
+  font-size: var(--text-xs);
+  color: var(--color-error);
+  text-align: end;
+}

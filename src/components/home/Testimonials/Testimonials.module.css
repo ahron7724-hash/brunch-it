@@ -1,0 +1,69 @@
+.section { padding-block: var(--space-16); }
+
+@media (min-width: 48em) {
+  .section { padding-block: var(--space-30); }
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-10);
+  inline-size: min(100% - 2 * var(--container-pad), 46rem);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.quote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  min-block-size: 15rem;
+}
+
+.stars {
+  font-size: var(--text-sm);
+  color: var(--color-accent);
+}
+
+.text {
+  max-inline-size: none;
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-light);
+  line-height: 1.55;
+}
+
+.who {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.name {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--tap-target);
+  min-block-size: var(--tap-target);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: none;
+
+  &:hover { border-color: var(--color-text); }
+}

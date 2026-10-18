@@ -1,0 +1,66 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-block-size: var(--tap-target);
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  border: 1px solid transparent;
+  border-radius: var(--radius-button);
+  transition:
+    background-color var(--duration) var(--ease),
+    color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease);
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
+.primary {
+  padding-inline: var(--space-8);
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+
+  &:hover:not(:disabled) { background: var(--color-primary-hover); }
+  &:disabled { color: var(--color-text-muted); background: var(--color-border); }
+}
+
+.line {
+  padding-inline: var(--space-8);
+  color: var(--color-text);
+  border-color: var(--color-text);
+  background: transparent;
+
+  &:hover:not(:disabled) { color: var(--color-bg); background: var(--color-text); }
+  &:disabled { color: var(--color-text-muted); border-color: var(--color-border); }
+}
+
+.text {
+  min-block-size: auto;
+  padding-block-end: var(--space-1);
+  color: var(--color-text);
+  border-block-end-color: var(--color-accent);
+  border-radius: 0;
+  background: transparent;
+
+  &:hover:not(:disabled) { color: var(--color-accent); }
+  &:disabled { color: var(--color-text-muted); border-block-end-color: transparent; }
+}
+
+/* Buttons placed over a photo (hero) */
+.onImage.primary {
+  color: var(--color-primary);
+  background: var(--color-on-image);
+
+  &:hover:not(:disabled) { background: var(--color-surface); }
+}
+
+.onImage.line {
+  color: var(--color-on-image);
+  border-color: var(--color-on-image);
+
+  &:hover:not(:disabled) { color: var(--color-primary); background: var(--color-on-image); }
+}

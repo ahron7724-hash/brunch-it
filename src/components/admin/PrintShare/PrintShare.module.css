@@ -1,0 +1,14 @@
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.link {
+  border-block-end: 1px solid var(--color-accent);
+}
+
+@media print {
+  .actions { display: none; }
+}

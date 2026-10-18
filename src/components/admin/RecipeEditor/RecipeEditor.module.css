@@ -1,0 +1,36 @@
+.editor {
+  display: flex;
+  flex-direction: column;
+}
+
+.muted { color: var(--color-text-muted); }
+
+.muted a { border-block-end: 1px solid var(--color-accent); }
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.saveBar {
+  position: sticky;
+  inset-block-end: 0;
+  z-index: var(--z-header);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+  margin-block-end: var(--space-6);
+  padding: var(--space-4) var(--space-6);
+  border-block-start: 1px solid var(--color-border);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-bar);
+}
+
+.saveButton { min-inline-size: 12rem; }
+
+.success { font-size: var(--text-sm); color: var(--color-success); }
+
+.error { font-size: var(--text-sm); color: var(--color-error); }
+

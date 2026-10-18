@@ -1,0 +1,27 @@
+.task {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-block-size: var(--tap-target);
+  padding-block: var(--space-2);
+  cursor: pointer;
+
+  &[data-done] .text {
+    color: var(--color-text-muted);
+    text-decoration: line-through;
+  }
+}
+
+.box {
+  flex-shrink: 0;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  margin-block-start: 0.15rem;
+  accent-color: var(--color-primary);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}

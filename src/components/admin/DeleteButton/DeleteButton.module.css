@@ -1,0 +1,52 @@
+.trigger,
+.cancel {
+  min-block-size: var(--tap-target);
+  padding: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  border: 0;
+  background: none;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+
+  &:hover { color: var(--color-error); }
+}
+
+.cancel:hover { color: var(--color-text); }
+
+.confirm {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.question { color: var(--color-error); }
+
+.danger {
+  min-block-size: var(--tap-target);
+  padding-inline: var(--space-4);
+  color: var(--color-bg);
+  border: 0;
+  border-radius: var(--radius-button);
+  background: var(--color-error);
+
+  &:disabled { opacity: 0.6; }
+}
+
+.error { color: var(--color-error); }
+
+.iconTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--tap-target);
+  min-block-size: var(--tap-target);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-bg);
+
+  &:hover { color: var(--color-error); border-color: var(--color-error); }
+}
