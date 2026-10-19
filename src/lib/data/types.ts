@@ -84,3 +84,35 @@ export const DIET_LABELS: Record<DietTag, string> = {
   gluten_free: "ללא גלוטן",
   vegan: "טבעוני",
 };
+
+export type TraySize = {
+  id: string;
+  label: string;
+  /** Units that fill the tray; null = singles (any amount). */
+  capacity: number | null;
+};
+
+export type TrayItem = {
+  id: string;
+  name: string;
+  /** Price per unit. */
+  price: number;
+  imageUrl: string | null;
+};
+
+export type Tray = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+  imageUrl: string | null;
+  /** null = use the site default lead time. */
+  leadTimeHours: number | null;
+  sizes: TraySize[];
+  items: TrayItem[];
+  /** Cheapest unit price, for "from ₪X per unit". */
+  minUnitPrice: number;
+};
+
+/** Most units in a "singles" tray (a size without a fixed capacity). */
+export const TRAY_MAX_SINGLES = 100;

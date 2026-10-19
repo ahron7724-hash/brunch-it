@@ -11,6 +11,7 @@ const LINKS = [
   { href: "/admin/production", label: "תוכנית עבודה" },
   { href: "/admin/inventory", label: "מלאי וקניות" },
   { href: "/admin/products", label: "מוצרים" },
+  { href: "/admin/trays", label: "מגשים" },
   { href: "/admin/categories", label: "קטגוריות" },
   { href: "/admin/schedule", label: "מועדי איסוף" },
   { href: "/admin/delivery", label: "משלוחים" },

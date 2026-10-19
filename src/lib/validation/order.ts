@@ -20,6 +20,9 @@ export const orderItemInputSchema = z.object({
   optionIds: z.array(z.string().uuid()).max(20).default([]),
   quantity: z.number().int().min(1).max(99),
   customText: z.string().trim().max(200).optional(),
+  /** "tray": productId is a tray id, sizeId a tray-size id, and trayItems its contents. */
+  kind: z.enum(["product", "tray"]).default("product"),
+  trayItems: z.array(z.object({ id: z.string().uuid(), quantity: z.number().int().min(1).max(200) })).max(50).default([]),
 });
 
 export type OrderItemInput = z.infer<typeof orderItemInputSchema>;

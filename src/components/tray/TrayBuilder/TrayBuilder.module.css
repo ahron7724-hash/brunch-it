@@ -1,0 +1,292 @@
+.builder {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* board: the item list and the tray side by side; the tray wraps below on narrow screens. */
+.board {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-10);
+}
+
+.items,
+.tray {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-inline-size: 0;
+  transition: box-shadow var(--duration) var(--ease), background-color var(--duration) var(--ease);
+}
+
+.items { flex: 3 1 28rem; }
+
+.tray {
+  flex: 2 1 20rem;
+  padding: var(--space-6);
+  background: var(--color-surface);
+}
+
+@media (min-width: 56em) {
+  .tray {
+    position: sticky;
+    inset-block-start: calc(var(--space-24) + var(--space-4));
+  }
+}
+
+.dropActive { box-shadow: inset 0 0 0 1px var(--color-accent); }
+
+.items.dropActive { background: var(--color-surface); }
+
+.heading {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-regular);
+}
+
+.hint {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* itemGrid: item cards keep equal widths, including a partial last row. */
+.itemGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: var(--space-6) var(--space-4);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-inline-size: 0;
+
+  &[draggable="true"] { cursor: grab; }
+  &[draggable="true"]:active { cursor: grabbing; }
+}
+
+.itemImageWrap {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  max-inline-size: 100%;
+  margin-block-end: var(--space-2);
+  overflow: hidden;
+  background: var(--color-surface);
+  transition: box-shadow var(--duration) var(--ease);
+}
+
+.itemChosen .itemImageWrap { box-shadow: inset 0 0 0 1px var(--color-text); }
+
+.itemImage {
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.badge {
+  position: absolute;
+  inset-block-start: var(--space-2);
+  inset-inline-start: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.75rem;
+  min-block-size: 1.75rem;
+  padding-inline: var(--space-1);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+}
+
+.itemName { font-weight: var(--weight-medium); }
+
+.itemPrice {
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+.itemControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block-start: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+}
+
+.stepButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--tap-target);
+  min-block-size: var(--tap-target);
+  border: 0;
+  background: none;
+
+  &:hover:not(:disabled) { color: var(--color-accent); }
+  &:disabled { color: var(--color-border); cursor: not-allowed; }
+}
+
+.stepValue {
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.trayHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.clear {
+  padding: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  border: 0;
+  border-block-end: 1px solid currentColor;
+  background: none;
+
+  &:hover { color: var(--color-error); }
+}
+
+/* slots: the tray itself, a grid of equal square places. */
+.slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(3.5rem, 1fr));
+  gap: var(--space-2);
+  padding: var(--space-3);
+  list-style: none;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.slot {
+  position: relative;
+  aspect-ratio: 1;
+  max-inline-size: 100%;
+}
+
+.empty {
+  position: absolute;
+  inset: 0;
+  border: 1px dashed var(--color-border);
+}
+
+.filled {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: var(--color-surface);
+  cursor: pointer;
+
+  &:hover { outline: 1px solid var(--color-error); outline-offset: 1px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .filled { animation: drop-in 260ms var(--ease); }
+}
+
+@keyframes drop-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.slotImage { object-fit: cover; }
+
+.initial {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.counter {
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+.total {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-light);
+  font-variant-numeric: tabular-nums;
+}
+
+.addButton { inline-size: 100%; }
+
+.trayAction {
+  display: none;
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--color-border);
+}
+
+/* mobileBar: on phones the count, total and button stay pinned to the bottom of the screen. */
+.mobileBar {
+  position: sticky;
+  inset-block-end: 0;
+  z-index: var(--z-header);
+  margin-inline: calc(var(--container-pad) * -1);
+  padding: var(--space-3) var(--container-pad);
+  border-block-start: 1px solid var(--color-border);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-bar);
+
+  & .action {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  & .summary {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  & .total { font-size: var(--text-xl); }
+
+  & .addButton { flex: 1 1 auto; inline-size: auto; }
+}
+
+@media (min-width: 56em) {
+  .trayAction { display: block; }
+  .mobileBar { display: none; }
+}
+
+.success { font-weight: var(--weight-medium); color: var(--color-success); }
+
+.error { font-weight: var(--weight-medium); color: var(--color-error); }
+
+.unavailableText {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.inlineLink {
+  padding: 0;
+  color: var(--color-text);
+  border: 0;
+  border-block-end: 1px solid var(--color-accent);
+  background: none;
+
+  &:hover { color: var(--color-accent); }
+}

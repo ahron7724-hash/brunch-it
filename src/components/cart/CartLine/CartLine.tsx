@@ -23,7 +23,7 @@ export function CartLine({ item, onNavigate }: CartLineProps) {
         {item.imageUrl && <Image src={item.imageUrl} alt="" fill sizes="5rem" className={styles.image} />}
       </div>
       <div className={styles.info}>
-        <Link href={`/product/${encodeURIComponent(item.slug)}`} className={styles.title} onClick={onNavigate}>
+        <Link href={`/${item.kind === "tray" ? "tray" : "product"}/${encodeURIComponent(item.slug)}`} className={styles.title} onClick={onNavigate}>
           {item.title}
         </Link>
         <p className={styles.meta}>{item.sizeLabel}</p>

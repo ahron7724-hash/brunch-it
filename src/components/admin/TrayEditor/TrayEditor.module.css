@@ -1,0 +1,145 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.itemsField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.empty {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.itemRow {
+  display: flex;
+  gap: var(--space-4);
+  padding-block-end: var(--space-3);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.itemHidden .thumb { opacity: 0.45; }
+
+.thumb {
+  position: relative;
+  flex: 0 0 5rem;
+  aspect-ratio: 1;
+  max-inline-size: 100%;
+  align-self: flex-start;
+  overflow: hidden;
+  border: 1px dashed var(--color-border);
+  background: var(--color-surface);
+}
+
+.thumbImage { object-fit: cover; }
+
+.itemFields {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+  min-inline-size: 0;
+}
+
+.cell {
+  display: flex;
+  flex: 2 1 12rem;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
+.priceCell { flex: 1 1 7rem; }
+
+.cellLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.input {
+  min-block-size: var(--tap-target);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-bg);
+
+  &:focus-visible { border-color: var(--color-text); }
+}
+
+.itemActions {
+  display: flex;
+  flex: 1 1 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--tap-target);
+  font-size: var(--text-sm);
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--tap-target);
+  min-block-size: var(--tap-target);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background: var(--color-bg);
+
+  &:disabled { color: var(--color-border); cursor: not-allowed; }
+}
+
+.remove {
+  min-block-size: var(--tap-target);
+  padding: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  border: 0;
+  background: none;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+
+  &:hover { color: var(--color-error); }
+}
+
+.add {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--tap-target);
+  padding-inline: var(--space-4);
+  border: 1px dashed var(--color-text-muted);
+  border-radius: var(--radius-button);
+  background: none;
+
+  &:hover { border-color: var(--color-text); }
+}

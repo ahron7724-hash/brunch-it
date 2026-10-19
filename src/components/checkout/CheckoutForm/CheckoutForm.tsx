@@ -52,7 +52,15 @@ export function CheckoutForm({ zones, pickupAddress, pickupMapUrl }: CheckoutFor
 
   const deliveryFee = fulfillment === "delivery" ? (zones.find((z) => z.id === zoneId)?.price ?? 0) : 0;
   const cart = JSON.stringify(
-    items.map((i) => ({ productId: i.productId, sizeId: i.sizeId, optionIds: i.optionIds ?? [], quantity: i.quantity, customText: i.customText }))
+    items.map((i) => ({
+      productId: i.productId,
+      sizeId: i.sizeId,
+      optionIds: i.optionIds ?? [],
+      quantity: i.quantity,
+      customText: i.customText,
+      kind: i.kind ?? "product",
+      trayItems: i.trayItems ?? [],
+    }))
   );
   const errors = state.errors ?? {};
   const values = state.values ?? {};

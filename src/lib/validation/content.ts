@@ -133,3 +133,26 @@ export function parseRows<T>(schema: z.ZodType<T>, rows: unknown): T[] {
     return parsed.success ? parsed.data : null;
   }));
 }
+
+export const trayRowSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string().max(120),
+  slug: z.string().max(140),
+  description: z.string().max(2000).nullable(),
+  image_url: imageUrlSchema.nullable().catch(null),
+  min_lead_time_hours: z.number().int().nullable(),
+  sort_order: z.number().int(),
+  tray_sizes: z.array(
+    z.object({ id: z.string().uuid(), label: z.string().max(60), capacity: z.number().int().positive().nullable(), sort_order: z.number().int() })
+  ),
+  tray_items: z.array(
+    z.object({
+      id: z.string().uuid(),
+      name: z.string().max(80),
+      price,
+      image_url: imageUrlSchema.nullable().catch(null),
+      is_active: z.boolean(),
+      sort_order: z.number().int(),
+    })
+  ),
+});

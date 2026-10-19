@@ -13,7 +13,7 @@ const MAX_HERO_ORIGINAL_BYTES = 8 * 1024 * 1024;
 const MAX_HERO_DIMENSION = 4096;
 const HERO_WEBP_QUALITY = 0.92;
 
-export type UploadFolder = "products" | "categories" | "hero" | "strips" | "gallery" | "pages" | "testimonials" | "brand";
+export type UploadFolder = "products" | "trays" | "categories" | "hero" | "strips" | "gallery" | "pages" | "testimonials" | "brand";
 
 export type UploadResult = { ok: true; url: string } | { ok: false; message: string };
 

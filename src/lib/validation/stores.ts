@@ -24,9 +24,12 @@ export const cartItemSchema = z.object({
   imageUrl: imageUrlSchema.nullable(),
   customText: z.string().max(200).optional(),
   optionIds: z.array(z.string().uuid()).max(20).optional(),
-  optionLabels: z.array(z.string().max(160)).max(20).optional(),
+  optionLabels: z.array(z.string().max(160)).max(50).optional(),
   leadTimeHours: z.number().int().nonnegative().max(24 * 60).nullable(),
   slug: z.string().max(140),
+  /** "tray": a build-your-own tray; productId/sizeId are the tray and tray-size ids. */
+  kind: z.enum(["product", "tray"]).optional(),
+  trayItems: z.array(z.object({ id: z.string().uuid(), quantity: z.number().int().min(1).max(200) })).max(50).optional(),
 });
 
 export const persistedCartSchema = z.object({

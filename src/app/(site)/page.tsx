@@ -7,9 +7,11 @@ import { HeroContent } from "@/components/home/HeroContent/HeroContent";
 import { HeroSlider } from "@/components/home/HeroSlider/HeroSlider";
 import { ImageStrips } from "@/components/home/ImageStrips/ImageStrips";
 import { Testimonials } from "@/components/home/Testimonials/Testimonials";
+import { TrayRow } from "@/components/home/TrayRow/TrayRow";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { getCategories, getProducts } from "@/lib/data/catalog";
 import { getAboutPage, getHeroSlides, getStripImages, getTestimonials } from "@/lib/data/content";
+import { getTrays } from "@/lib/data/trays";
 import { getSettings } from "@/lib/settings/get-settings";
 
 import styles from "./page.module.css";
@@ -18,12 +20,13 @@ import styles from "./page.module.css";
 export const revalidate = 3600;
 
 export default async function HomePage() {
-  const [settings, slides, strips, categories, featured, testimonials, about] = await Promise.all([
+  const [settings, slides, strips, categories, featured, trays, testimonials, about] = await Promise.all([
     getSettings(),
     getHeroSlides(),
     getStripImages(),
     getCategories(),
     getProducts({ featuredOnly: true, limit: 8 }),
+    getTrays(),
     getTestimonials(),
     getAboutPage(),
   ]);
@@ -61,6 +64,8 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      <TrayRow trays={trays} />
 
       {testimonials.length > 0 && <Testimonials items={testimonials} />}
 
