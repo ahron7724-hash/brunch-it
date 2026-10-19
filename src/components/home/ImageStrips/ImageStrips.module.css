@@ -40,7 +40,7 @@
 .tile {
   position: relative;
   flex: none;
-  inline-size: var(--tile-w);
+  inline-size: calc(var(--tile-h) * var(--image-aspect-ratio, 1));
   block-size: var(--tile-h);
   overflow: hidden;
   background: var(--color-surface);

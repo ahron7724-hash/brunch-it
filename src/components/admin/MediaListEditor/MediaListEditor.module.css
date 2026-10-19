@@ -18,6 +18,20 @@
   min-inline-size: 0;
 }
 
+.selection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--tap-target);
+  font-size: var(--text-sm);
+}
+
+.selection input {
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  accent-color: var(--color-primary);
+}
+
 .thumb {
   position: relative;
   aspect-ratio: 4 / 5;

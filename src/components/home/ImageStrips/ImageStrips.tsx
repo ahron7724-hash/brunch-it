@@ -3,7 +3,7 @@
 import clsx from "clsx";
 import { Pause, Play } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 
 import type { MediaItem } from "@/lib/data/types";
 
@@ -48,12 +48,34 @@ function Strip({ items, direction }: StripProps) {
       <ul role="list" className={clsx(styles.track, direction === "ltr" && styles.reverse)}>
         {copies.map((copy) =>
           items.map((item) => (
-            <li key={`${copy}-${item.id}`} className={styles.tile} aria-hidden={copy === "b"}>
-              <Image src={item.url} alt={copy === "a" ? item.alt : ""} fill sizes="24rem" className={styles.image} />
-            </li>
+            <StripTile key={`${copy}-${item.id}`} item={item} copy={copy} />
           ))
         )}
       </ul>
     </div>
+  );
+}
+
+function StripTile({ item, copy }: { item: MediaItem; copy: "a" | "b" }) {
+  const [aspectRatio, setAspectRatio] = useState(1);
+
+  return (
+    <li
+      className={styles.tile}
+      aria-hidden={copy === "b"}
+      style={{ "--image-aspect-ratio": aspectRatio } as CSSProperties}
+    >
+      <Image
+        src={item.url}
+        alt={copy === "a" ? item.alt : ""}
+        fill
+        sizes="50vw"
+        className={styles.image}
+        onLoad={(event) => {
+          const { naturalWidth, naturalHeight } = event.currentTarget;
+          if (naturalWidth > 0 && naturalHeight > 0) setAspectRatio(naturalWidth / naturalHeight);
+        }}
+      />
+    </li>
   );
 }

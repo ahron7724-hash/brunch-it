@@ -20,15 +20,11 @@
   block-size: 100%;
   object-fit: cover;
   opacity: 0;
-  transform: scale(1.04);
-  transition:
-    opacity 1200ms var(--ease),
-    transform 7000ms linear;
+  transition: opacity 1200ms var(--ease);
 }
 
 .active {
   opacity: 1;
-  transform: scale(1);
 }
 
 .content { position: relative; }

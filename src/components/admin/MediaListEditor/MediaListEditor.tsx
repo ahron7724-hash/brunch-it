@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useState, useTransition } from "react";
 
-import { addMedia, deleteMedia, saveMediaOrder, type MediaListName } from "@/app/admin/(panel)/media/actions";
+import { addMedia, deleteMedia, deleteMediaBatch, saveMediaOrder, type MediaListName } from "@/app/admin/(panel)/media/actions";
 import { DeleteButton } from "@/components/admin/DeleteButton/DeleteButton";
 import { ImageUploader } from "@/components/admin/ImageUploader/ImageUploader";
 import { Button } from "@/components/ui/Button/Button";
@@ -27,15 +27,25 @@ type MediaListEditorProps = {
 export function MediaListEditor({ list, items: initial, folder, max, allowVideo = false, withCaption = false }: MediaListEditorProps) {
   const [items, setItems] = useState(initial);
   const [syncedFrom, setSyncedFrom] = useState(initial);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
   const [isPending, startTransition] = useTransition();
   if (syncedFrom !== initial) {
     setSyncedFrom(initial);
     setItems(initial);
+    setSelectedIds(new Set());
   }
 
+  const canSelectMany = list === "stripTop" || list === "stripBottom";
   const edit = (id: string, field: "alt" | "caption", value: string) =>
     setItems((all) => all.map((item) => (item.id === id ? { ...item, [field]: value } : item)));
+  const toggleSelected = (id: string) =>
+    setSelectedIds((selected) => {
+      const next = new Set(selected);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   const move = (index: number, delta: number) =>
     setItems((all) => {
       const next = [...all];
@@ -49,6 +59,17 @@ export function MediaListEditor({ list, items: initial, folder, max, allowVideo 
       <ul role="list" className={styles.grid}>
         {items.map((item, index) => (
           <li key={item.id} className={styles.card}>
+            {canSelectMany && (
+              <label className={styles.selection}>
+                <input
+                  type="checkbox"
+                  checked={selectedIds.has(item.id)}
+                  onChange={() => toggleSelected(item.id)}
+                  aria-label={`בחירת תמונה ${index + 1}`}
+                />
+                בחירה
+              </label>
+            )}
             <div className={styles.thumb}>
               {item.isVideo ? <span className={styles.video}>סרטון</span> : <Image src={item.url} alt="" fill sizes="10rem" className={styles.image} />}
             </div>
@@ -74,14 +95,38 @@ export function MediaListEditor({ list, items: initial, folder, max, allowVideo 
           <ImageUploader
             folder={folder}
             allowVideo={allowVideo}
+            multiple={canSelectMany}
+            maxFiles={max - items.length}
             label={`הוספה (${items.length}/${max})`}
             onUploaded={async (url) => {
               const result = await addMedia(list, url, "");
-              setMessage(result.ok ? null : { ok: false, text: result.message });
+              if (!result.ok) throw new Error(result.message);
+              setMessage(null);
             }}
           />
         ) : (
           <p className={styles.note}>הגעת למקסימום ({max}).</p>
+        )}
+        {canSelectMany && selectedIds.size > 0 && (
+          <Button
+            variant="line"
+            disabled={isPending}
+            onClick={() => {
+              if (!window.confirm(`למחוק ${selectedIds.size} תמונות שנבחרו?`)) return;
+              startTransition(async () => {
+                const ids = Array.from(selectedIds);
+                const result = await deleteMediaBatch(list, ids);
+                if (result.ok) {
+                  setItems((all) => all.filter((item) => !selectedIds.has(item.id)));
+                  setSelectedIds(new Set());
+                }
+                setMessage({ ok: result.ok, text: result.ok ? result.message ?? "התמונות שנבחרו נמחקו" : result.message });
+              });
+            }}
+          >
+            <Trash2 size={16} aria-hidden="true" />
+            מחיקת {selectedIds.size} תמונות שנבחרו
+          </Button>
         )}
         {items.length > 0 && (
           <Button
