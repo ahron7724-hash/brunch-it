@@ -7,7 +7,7 @@ import { HeroContent } from "@/components/home/HeroContent/HeroContent";
 import { HeroSlider } from "@/components/home/HeroSlider/HeroSlider";
 import { ImageStrips } from "@/components/home/ImageStrips/ImageStrips";
 import { Testimonials } from "@/components/home/Testimonials/Testimonials";
-import { TrayRow } from "@/components/home/TrayRow/TrayRow";
+import { TraySection } from "@/components/home/TraySection/TraySection";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { getCategories, getProducts } from "@/lib/data/catalog";
 import { getAboutPage, getHeroSlides, getStripImages, getTestimonials } from "@/lib/data/content";
@@ -65,7 +65,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      <TrayRow trays={trays} />
+      <TraySection trays={trays} />
 
       {testimonials.length > 0 && <Testimonials items={testimonials} />}
 
