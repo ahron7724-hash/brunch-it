@@ -28,6 +28,7 @@ export const siteSettingsSchema = z.object({
   heroEyebrow: shortText(60).catch(d.heroEyebrow),
   heroTitle: shortText(120).min(1).catch(d.heroTitle),
   heroSubtitle: shortText(300).catch(d.heroSubtitle),
+  headerOnScroll: z.boolean().catch(d.headerOnScroll),
   phone: shortText(20).catch(d.phone),
   whatsapp: shortText(20).catch(d.whatsapp),
   orderEmail: z.union([z.literal(""), z.string().trim().email().max(254)]).catch(d.orderEmail),

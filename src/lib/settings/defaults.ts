@@ -24,6 +24,8 @@ export type SiteSettings = {
   heroEyebrow: string;
   heroTitle: string;
   heroSubtitle: string;
+  /** Home page only: the header stays hidden over the hero until the visitor scrolls. */
+  headerOnScroll: boolean;
   phone: string;
   whatsapp: string;
   orderEmail: string;
@@ -50,6 +52,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   heroTitle: "עוגות מעוצבות לרגעים שזוכרים",
   heroSubtitle:
     "עבודת יד בכמויות קטנות, מחומרי גלם מובחרים. מזמינים מראש ואוספים טרי ביום האירוע.",
+  headerOnScroll: true,
   phone: "",
   whatsapp: "",
   orderEmail: "",

@@ -7,13 +7,14 @@ import type { SiteSettings } from "@/lib/settings/defaults";
 
 import styles from "./Header.module.css";
 import { HeaderCart } from "./HeaderCart";
+import { HeaderShell } from "./HeaderShell";
 import { MobileMenu } from "./MobileMenu";
 
 type HeaderProps = { settings: SiteSettings };
 
 export function Header({ settings }: HeaderProps) {
   return (
-    <header className={styles.header}>
+    <HeaderShell revealOnScroll={settings.headerOnScroll}>
       <div className={styles.main}>
         <div className={clsx("container", styles.inner)}>
           <div className={styles.side}>
@@ -36,6 +37,6 @@ export function Header({ settings }: HeaderProps) {
           </div>
         </div>
       </div>
-    </header>
+    </HeaderShell>
   );
 }

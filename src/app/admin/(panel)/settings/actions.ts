@@ -7,7 +7,7 @@ import { revalidateSite } from "@/lib/admin/revalidate";
 import { saveSettingsPatch } from "@/lib/admin/settings";
 import { adminClient, NOT_AUTHORIZED, type AdminActionResult } from "@/lib/auth/admin";
 import { FONT_KEYS } from "@/lib/settings/defaults";
-import { ownImageUrlSchema } from "@/lib/validation/admin";
+import { checkbox, ownImageUrlSchema } from "@/lib/validation/admin";
 import { phoneSchema } from "@/lib/validation/order";
 
 const hex = z.string().regex(/^#[0-9a-f]{6}$/i, "צבע לא תקין");
@@ -26,6 +26,7 @@ const settingsSchema = z.object({
   heroEyebrow: text(60),
   heroTitle: text(120).min(1, "נא למלא כותרת ראשית"),
   heroSubtitle: text(300),
+  headerOnScroll: checkbox,
   phone: z.union([z.literal(""), phoneSchema]),
   whatsapp: z.union([z.literal(""), phoneSchema]),
   orderEmail: z.union([z.literal(""), z.string().trim().email("כתובת דוא״ל לא תקינה").max(254)]),
@@ -49,6 +50,7 @@ export async function saveSettings(_prev: AdminActionResult | null, formData: Fo
     heroEyebrow: field("heroEyebrow"),
     heroTitle: field("heroTitle"),
     heroSubtitle: field("heroSubtitle"),
+    headerOnScroll: field("headerOnScroll"),
     phone: field("phone"),
     whatsapp: field("whatsapp"),
     orderEmail: field("orderEmail"),
@@ -70,6 +72,7 @@ export async function saveSettings(_prev: AdminActionResult | null, formData: Fo
     heroEyebrow: d.heroEyebrow,
     heroTitle: d.heroTitle,
     heroSubtitle: d.heroSubtitle,
+    headerOnScroll: d.headerOnScroll,
     phone: d.phone,
     whatsapp: d.whatsapp,
     orderEmail: d.orderEmail,

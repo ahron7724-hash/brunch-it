@@ -2,6 +2,7 @@ import { AdminForm } from "@/components/admin/AdminForm/AdminForm";
 import { AdminHeader } from "@/components/admin/AdminHeader/AdminHeader";
 import { ImageField } from "@/components/admin/ImageField/ImageField";
 import { Panel } from "@/components/admin/Panel/Panel";
+import { Checkbox } from "@/components/ui/Checkbox/Checkbox";
 import { ColorField } from "@/components/ui/ColorField/ColorField";
 import { Field } from "@/components/ui/Field/Field";
 import { Select } from "@/components/ui/Select/Select";
@@ -43,6 +44,7 @@ export default async function SettingsPage() {
           <Field id="heroEyebrow" label="שורה קטנה מעל הכותרת" maxLength={60} required={false} defaultValue={s.heroEyebrow} />
           <Field id="heroTitle" label="כותרת ראשית" maxLength={120} defaultValue={s.heroTitle} />
           <Field id="heroSubtitle" label="כותרת משנה" multiline rows={2} maxLength={300} required={false} defaultValue={s.heroSubtitle} />
+          <Checkbox id="headerOnScroll" name="headerOnScroll" label="להסתיר את התפריט העליון בראש דף הבית, ולהציג אותו רק בגלילה" defaultChecked={s.headerOnScroll} />
         </Panel>
 
         <Panel title="פרטי קשר והזמנות">
