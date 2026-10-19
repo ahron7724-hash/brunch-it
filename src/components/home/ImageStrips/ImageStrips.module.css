@@ -1,6 +1,6 @@
 .strips {
-  --tile-w: 14.5rem;
-  --tile-h: 18rem;
+  --tile-w: 9.75rem;
+  --tile-h: 12rem;
   --tile-gap: var(--space-4);
 
   display: flex;
@@ -10,11 +10,11 @@
 }
 
 @media (min-width: 40em) {
-  .strips { --tile-w: 19rem; --tile-h: 24rem; }
+  .strips { --tile-w: 12.75rem; --tile-h: 16rem; }
 }
 
 @media (min-width: 64em) {
-  .strips { --tile-w: 24rem; --tile-h: 30rem; }
+  .strips { --tile-w: 16rem; --tile-h: 20rem; }
 }
 
 /* The strips scroll physically (left/right on screen), independent of the page's RTL direction. */
