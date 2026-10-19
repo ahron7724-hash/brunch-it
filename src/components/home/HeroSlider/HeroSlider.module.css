@@ -6,10 +6,12 @@
   overflow: hidden;
   color: var(--color-on-image);
   background: var(--color-surface);
+  /* Clips the fixed media below to the hero's box, so the page scrolls over a still image. */
+  clip-path: inset(0);
 }
 
 .media {
-  position: absolute;
+  position: fixed;
   inset: 0;
 }
 
