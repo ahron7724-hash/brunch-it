@@ -5,7 +5,7 @@ import styles from "./HeroContent.module.css";
 
 type HeroContentProps = { settings: SiteSettings };
 
-/** Text of the home hero: owner-edited eyebrow, title, subtitle and two calls to action. */
+/** Text overlay of the home hero: owner-edited eyebrow, title, subtitle and two calls to action. */
 export function HeroContent({ settings }: HeroContentProps) {
   return (
     <div className={styles.content}>
@@ -13,10 +13,10 @@ export function HeroContent({ settings }: HeroContentProps) {
       <h1>{settings.heroTitle}</h1>
       {settings.heroSubtitle && <p className={styles.sub}>{settings.heroSubtitle}</p>}
       <div className={styles.actions}>
-        <ButtonLink href="/catalog">
+        <ButtonLink href="/catalog" tone="onImage">
           לקטלוג
         </ButtonLink>
-        <ButtonLink href="/about" variant="line">
+        <ButtonLink href="/about" variant="line" tone="onImage">
           הזמנה בעיצוב אישי
         </ButtonLink>
       </div>

@@ -34,8 +34,6 @@ export default async function HomePage() {
         <HeroContent settings={settings} />
       </HeroSlider>
 
-      <ImageStrips top={strips.top} bottom={strips.bottom} />
-
       {categories.length > 0 && (
         <section className="section" aria-labelledby="categories-title">
           <div className="container">
@@ -65,6 +63,8 @@ export default async function HomePage() {
       )}
 
       {testimonials.length > 0 && <Testimonials items={testimonials} />}
+
+      <ImageStrips top={strips.top} bottom={strips.bottom} />
 
       {about && <AboutTeaser page={about} kashrutLine={settings.kashrutLine} />}
     </>

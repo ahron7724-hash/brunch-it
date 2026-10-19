@@ -1,31 +1,16 @@
-/* Text first (right in RTL), one small portrait frame beside it; stacked on narrow screens. */
 .hero {
-  display: grid;
-  gap: var(--space-10);
-  align-items: center;
-  padding-block: var(--space-16);
-}
-
-@media (min-width: 64em) {
-  .hero {
-    grid-template-columns: 1fr 22rem;
-    gap: var(--space-24);
-    padding-block: var(--space-24);
-  }
-}
-
-.side {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  max-inline-size: 22rem;
+  align-items: center;
+  min-block-size: var(--hero-min);
+  overflow: hidden;
+  color: var(--color-on-image);
+  background: var(--color-surface);
 }
 
 .media {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  background: var(--color-surface);
+  position: absolute;
+  inset: 0;
 }
 
 .slide {
@@ -42,17 +27,39 @@
   opacity: 1;
 }
 
-.content { min-inline-size: 0; }
+/* Each slide slowly zooms in while it is shown; the scale lingers through the crossfade out. */
+@media (prefers-reduced-motion: no-preference) {
+  .slide { transition: opacity 1200ms var(--ease), transform 1200ms var(--ease) 1200ms; }
+  .active { transform: scale(1.1); transition: opacity 1200ms var(--ease), transform 9s linear; }
+}
+
+/* Even tint so the centered text reads on any photo. */
+.media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(15 12 10 / 0.35);
+}
+
+.content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
 
 .controls {
+  position: absolute;
+  inset-block-end: var(--space-6);
+  inset-inline-end: var(--container-pad);
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   gap: var(--space-3);
   font-size: var(--text-sm);
   font-variant-numeric: tabular-nums;
-  color: var(--color-text-muted);
 }
+
+.counter { opacity: 0.85; }
 
 .pause {
   display: flex;
@@ -60,10 +67,10 @@
   justify-content: center;
   min-inline-size: var(--tap-target);
   min-block-size: var(--tap-target);
-  color: var(--color-text-muted);
-  border: 1px solid var(--color-border);
+  color: var(--color-on-image);
+  border: 1px solid color-mix(in srgb, var(--color-on-image) 50%, transparent);
   border-radius: var(--radius-button);
   background: transparent;
 
-  &:hover { color: var(--color-text); border-color: var(--color-text); }
+  &:hover { border-color: var(--color-on-image); }
 }
