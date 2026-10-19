@@ -16,7 +16,7 @@ type HeroSliderProps = {
   children: ReactNode;
 };
 
-/** Full-width hero: crossfading images (up to 10) or a muted looping video, with the text overlay as children. */
+/** Hero: the text (children) on a plain background beside one small frame of crossfading images (up to 10) or a muted looping video. */
 export function HeroSlider({ slides, children }: HeroSliderProps) {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -32,50 +32,53 @@ export function HeroSlider({ slides, children }: HeroSliderProps) {
   }, [canRotate, paused, slides.length]);
 
   return (
-    <section className={styles.hero} aria-label="באנר ראשי">
-      <div className={styles.media} aria-hidden="true">
-        {slides.map((slide, index) =>
-          slide.mediaType === "video" ? (
-            <video
-              key={slide.id}
-              className={clsx(styles.slide, index === active && styles.active)}
-              src={slide.url}
-              autoPlay
-              muted
-              loop
-              playsInline
-            />
-          ) : (
-            <Image
-              key={slide.id}
-              src={slide.url}
-              alt=""
-              fill
-              sizes="100vw"
-              quality={90}
-              preload={index === 0}
-              className={clsx(styles.slide, index === active && styles.active)}
-            />
-          )
+    <section className={clsx("container", styles.hero)} aria-label="באנר ראשי">
+      <div className={styles.content}>{children}</div>
+
+      <div className={styles.side}>
+        <div className={styles.media} aria-hidden="true">
+          {slides.map((slide, index) =>
+            slide.mediaType === "video" ? (
+              <video
+                key={slide.id}
+                className={clsx(styles.slide, index === active && styles.active)}
+                src={slide.url}
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+            ) : (
+              <Image
+                key={slide.id}
+                src={slide.url}
+                alt=""
+                fill
+                sizes="(min-width: 64em) 22rem, 90vw"
+                quality={90}
+                preload={index === 0}
+                className={clsx(styles.slide, index === active && styles.active)}
+              />
+            )
+          )}
+        </div>
+
+        {canRotate && (
+          <div className={styles.controls}>
+            <span className={clsx("ltr", styles.counter)} aria-hidden="true">
+              {String(active + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
+            </span>
+            <button
+              type="button"
+              className={styles.pause}
+              onClick={() => setPaused((p) => !p)}
+              aria-label={paused ? "הפעלת החלפת התמונות" : "עצירת החלפת התמונות"}
+            >
+              {paused ? <Play size={16} strokeWidth={1.5} aria-hidden="true" /> : <Pause size={16} strokeWidth={1.5} aria-hidden="true" />}
+            </button>
+          </div>
         )}
       </div>
-      <div className={clsx("container", styles.content)}>{children}</div>
-
-      {canRotate && (
-        <div className={styles.controls}>
-          <span className={clsx("ltr", styles.counter)} aria-hidden="true">
-            {String(active + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
-          </span>
-          <button
-            type="button"
-            className={styles.pause}
-            onClick={() => setPaused((p) => !p)}
-            aria-label={paused ? "הפעלת החלפת התמונות" : "עצירת החלפת התמונות"}
-          >
-            {paused ? <Play size={16} strokeWidth={1.5} aria-hidden="true" /> : <Pause size={16} strokeWidth={1.5} aria-hidden="true" />}
-          </button>
-        </div>
-      )}
     </section>
   );
 }
