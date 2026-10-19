@@ -32,7 +32,6 @@
 
 .reverse { animation-name: slide-right; }
 
-.strip:hover .track,
 .paused .track {
   animation-play-state: paused;
 }
