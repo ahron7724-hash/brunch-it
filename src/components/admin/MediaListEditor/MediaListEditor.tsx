@@ -71,7 +71,7 @@ export function MediaListEditor({ list, items: initial, folder, max, allowVideo 
               </label>
             )}
             <div className={styles.thumb}>
-              {item.isVideo ? <span className={styles.video}>סרטון</span> : <Image src={item.url} alt="" fill sizes="10rem" className={styles.image} />}
+              {item.isVideo ? <span className={styles.video}>סרטון</span> : <Image src={item.url} alt="" fill sizes="(min-width: 40em) 16rem, 50vw" className={styles.image} />}
             </div>
             <input aria-label="תיאור קצר (לנגישות)" placeholder="תיאור קצר" value={item.alt} maxLength={200} onChange={(e) => edit(item.id, "alt", e.target.value)} className={styles.input} />
             {withCaption && (
