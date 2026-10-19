@@ -80,7 +80,7 @@
   --container-max: 84rem;
   --container-pad: var(--space-4);
   --tap-target: 2.75rem;
-  --hero-min: min(78dvh, 47.5rem);
+  --hero-min: min(84dvh, 52rem);
 
   /* Motion */
   --ease: cubic-bezier(0.2, 0, 0, 1);
