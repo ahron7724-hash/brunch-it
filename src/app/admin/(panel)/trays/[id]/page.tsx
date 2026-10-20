@@ -31,6 +31,7 @@ export default async function EditTrayPage({ params }: EditTrayPageProps) {
 
       <TrayEditor
         action={saveTray.bind(null, tray.id)}
+        images={tray.tray_images.map((i) => ({ id: i.id, url: i.url, alt: i.alt ?? "" }))}
         sizes={tray.tray_sizes.map((s) => ({ id: s.id, label: s.label, capacity: s.capacity === null ? "" : String(s.capacity) }))}
         items={tray.tray_items.map((i) => ({ id: i.id, name: i.name, price: String(i.price), imageUrl: i.image_url ?? "", isActive: i.is_active }))}
       >

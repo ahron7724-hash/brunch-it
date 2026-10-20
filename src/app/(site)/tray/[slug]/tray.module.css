@@ -36,3 +36,43 @@
   font-size: var(--text-sm);
   color: var(--color-text-muted);
 }
+
+/* ---------- Text over the hero images ---------- */
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  max-inline-size: 44rem;
+  padding-block: var(--space-16);
+}
+
+.heroEyebrow {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-on-image-soft);
+}
+
+.heroTitle {
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-tight);
+}
+
+.heroDescription {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-light);
+  opacity: 0.92;
+}
+
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(1.25rem); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .heroText > * { animation: hero-rise 900ms var(--ease) both; }
+  .heroText > :nth-child(2) { animation-delay: 120ms; }
+  .heroText > :nth-child(3) { animation-delay: 240ms; }
+}

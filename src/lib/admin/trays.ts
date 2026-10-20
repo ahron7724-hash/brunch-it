@@ -16,6 +16,7 @@ const traySchema = z.object({
   min_lead_time_hours: z.number().int().nullable(),
   is_active: z.boolean(),
   sort_order: z.number().int(),
+  tray_images: z.array(z.object({ id: z.string().uuid(), url: imageUrlSchema, alt: z.string().nullable(), sort_order: z.number().int() })).catch([]),
   tray_sizes: z.array(z.object({ id: z.string().uuid(), label: z.string(), capacity: z.number().int().nullable(), sort_order: z.number().int() })).catch([]),
   tray_items: z
     .array(
@@ -34,11 +35,16 @@ const traySchema = z.object({
 export type AdminTray = z.infer<typeof traySchema>;
 
 const COLUMNS =
-  "id, title, slug, description, image_url, min_lead_time_hours, is_active, sort_order, tray_sizes(id, label, capacity, sort_order), tray_items(id, name, price, image_url, is_active, sort_order)";
+  "id, title, slug, description, image_url, min_lead_time_hours, is_active, sort_order, tray_images(id, url, alt, sort_order), tray_sizes(id, label, capacity, sort_order), tray_items(id, name, price, image_url, is_active, sort_order)";
 
 function sorted(tray: AdminTray): AdminTray {
   const bySort = <T extends { sort_order: number }>(a: T, b: T) => a.sort_order - b.sort_order;
-  return { ...tray, tray_sizes: [...tray.tray_sizes].sort(bySort), tray_items: [...tray.tray_items].sort(bySort) };
+  return {
+    ...tray,
+    tray_images: [...tray.tray_images].sort(bySort),
+    tray_sizes: [...tray.tray_sizes].sort(bySort),
+    tray_items: [...tray.tray_items].sort(bySort),
+  };
 }
 
 export async function listAdminTrays(): Promise<AdminTray[]> {

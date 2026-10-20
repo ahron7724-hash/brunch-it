@@ -145,6 +145,7 @@ export const trayRowSchema = z.object({
   tray_sizes: z.array(
     z.object({ id: z.string().uuid(), label: z.string().max(60), capacity: z.number().int().positive().nullable(), sort_order: z.number().int() })
   ),
+  tray_images: z.array(productImageRowSchema).catch([]),
   tray_items: z.array(
     z.object({
       id: z.string().uuid(),

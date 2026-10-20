@@ -4,6 +4,7 @@ import { startTransition, useActionState, useEffect, useState, type FormEvent, t
 
 import { Panel } from "@/components/admin/Panel/Panel";
 import { SaveBar } from "@/components/admin/ProductEditor/SaveBar";
+import { ProductImagesField, type ProductImageValue } from "@/components/admin/ProductImagesField/ProductImagesField";
 import { fromEditableRows, RowsField, toEditableRows, type Column } from "@/components/admin/RowsField/RowsField";
 import type { AdminActionResult } from "@/lib/auth/admin";
 
@@ -17,8 +18,11 @@ const SIZE_COLUMNS: Column[] = [
 
 type SavedItem = { id: string; name: string; price: string; imageUrl: string; isActive: boolean };
 
+type SavedImage = { id: string; url: string; alt: string };
+
 type TrayEditorProps = {
   action: (prev: AdminActionResult | null, formData: FormData) => Promise<AdminActionResult>;
+  images: SavedImage[];
   sizes: Record<string, string>[];
   items: SavedItem[];
   /** The details fields (rendered on the server), placed inside the same form. */
@@ -26,16 +30,18 @@ type TrayEditorProps = {
 };
 
 /** The whole tray page as one form with a single save button. */
-export function TrayEditor({ action, sizes: savedSizes, items: savedItems, children }: TrayEditorProps) {
+export function TrayEditor({ action, images: savedImages, sizes: savedSizes, items: savedItems, children }: TrayEditorProps) {
+  const [images, setImages] = useState<ProductImageValue[]>(() => savedImages.map((img) => ({ ...img, _key: img.id })));
   const [sizes, setSizes] = useState(() => toEditableRows(savedSizes));
   const [items, setItems] = useState<TrayItemValue[]>(() => savedItems.map((i) => ({ ...i, _key: i.id })));
   const [dirty, setDirty] = useState(false);
   const [showResult, setShowResult] = useState(false);
 
   // After a save the server sends fresh data (with new ids); take it without remounting, so the message stays.
-  const [synced, setSynced] = useState({ savedSizes, savedItems });
-  if (synced.savedSizes !== savedSizes || synced.savedItems !== savedItems) {
-    setSynced({ savedSizes, savedItems });
+  const [synced, setSynced] = useState({ savedImages, savedSizes, savedItems });
+  if (synced.savedImages !== savedImages || synced.savedSizes !== savedSizes || synced.savedItems !== savedItems) {
+    setSynced({ savedImages, savedSizes, savedItems });
+    setImages(savedImages.map((img) => ({ ...img, _key: img.id })));
     setSizes(toEditableRows(savedSizes));
     setItems(savedItems.map((i) => ({ ...i, _key: i.id })));
   }
@@ -67,10 +73,18 @@ export function TrayEditor({ action, sizes: savedSizes, items: savedItems, child
 
   return (
     <form onSubmit={(e) => submitWithoutReset(e, formAction)} onChange={markEdited} className={styles.form}>
+      <input type="hidden" name="images" value={JSON.stringify(images.map(({ id, url, alt }) => ({ id, url, alt })))} />
       <input type="hidden" name="sizes" value={JSON.stringify(fromEditableRows(sizes, SIZE_COLUMNS))} />
       <input type="hidden" name="items" value={JSON.stringify(items.map(({ id, name, price, imageUrl, isActive }) => ({ id, name, price, imageUrl, isActive })))} />
 
       <Panel title="פרטי המגש">{children}</Panel>
+
+      <Panel
+        title="תמונות גדולות לראש דף המגש"
+        description="עד 10 תמונות שמתחלפות בראש דף המגש. מומלץ תמונות רוחביות גדולות. בלי תמונות כאן, תוצג תמונת המגש."
+      >
+        <ProductImagesField images={images} onChange={change(setImages)} max={10} folder="trays" />
+      </Panel>
 
       <Panel
         title="גדלי מגש"

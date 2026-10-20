@@ -10,6 +10,7 @@ import type { Tray } from "./types";
 
 const TRAY_COLUMNS = `
   id, title, slug, description, image_url, min_lead_time_hours, sort_order,
+  tray_images ( url, alt, sort_order ),
   tray_sizes ( id, label, capacity, sort_order ),
   tray_items ( id, name, price, image_url, is_active, sort_order )
 `;
@@ -40,6 +41,7 @@ function toTray(row: z.infer<typeof trayRowSchema>): Tray {
     slug: row.slug,
     description: row.description,
     imageUrl: row.image_url,
+    heroImages: bySortOrder(row.tray_images).map((img) => ({ url: img.url, alt: img.alt ?? row.title })),
     leadTimeHours: row.min_lead_time_hours,
     sizes: bySortOrder(row.tray_sizes).map((s) => ({ id: s.id, label: s.label, capacity: s.capacity })),
     items,

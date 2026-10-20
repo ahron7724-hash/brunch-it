@@ -8,7 +8,7 @@ import { revalidateSite } from "@/lib/admin/revalidate";
 import { slugify } from "@/lib/admin/slug";
 import { storagePathFromUrl } from "@/lib/admin/storage";
 import { adminClient, NOT_AUTHORIZED, type AdminActionResult } from "@/lib/auth/admin";
-import { jsonField, trayDetailsSchema, trayItemsSchema, traySizesSchema, uuid } from "@/lib/validation/admin";
+import { jsonField, trayDetailsSchema, trayImagesSchema, trayItemsSchema, traySizesSchema, uuid } from "@/lib/validation/admin";
 
 type Supabase = NonNullable<Awaited<ReturnType<typeof adminClient>>>;
 type RowValues = Record<string, string | number | boolean | null>;
@@ -33,7 +33,7 @@ async function uniqueSlug(supabase: Supabase, base: string, exceptId?: string): 
 }
 
 /** Makes a tray's child rows match the submitted list: delete dropped, update kept, insert new. */
-async function syncChildren(supabase: Supabase, table: "tray_sizes" | "tray_items", trayId: string, rows: { id?: string; values: RowValues }[]) {
+async function syncChildren(supabase: Supabase, table: "tray_sizes" | "tray_items" | "tray_images", trayId: string, rows: { id?: string; values: RowValues }[]) {
   const { data, error } = await supabase.from(table).select("id").eq("tray_id", trayId);
   if (error) return false;
   const existing = (data ?? []).map((r: { id: string }) => r.id);
@@ -53,14 +53,18 @@ async function syncChildren(supabase: Supabase, table: "tray_sizes" | "tray_item
   return true;
 }
 
-/** Every image a tray uses (its own and its items'). */
+/** Every image a tray uses (its own, its hero images and its items'). */
 async function trayImageUrls(supabase: Supabase, trayId: string): Promise<string[]> {
-  const { data } = await supabase.from("trays").select("image_url, tray_items(image_url)").eq("id", trayId).maybeSingle();
+  const { data } = await supabase.from("trays").select("image_url, tray_images(url), tray_items(image_url)").eq("id", trayId).maybeSingle();
   const row = z
-    .object({ image_url: z.string().nullable(), tray_items: z.array(z.object({ image_url: z.string().nullable() })) })
+    .object({
+      image_url: z.string().nullable(),
+      tray_images: z.array(z.object({ url: z.string() })),
+      tray_items: z.array(z.object({ image_url: z.string().nullable() })),
+    })
     .safeParse(data);
   if (!row.success) return [];
-  return [row.data.image_url, ...row.data.tray_items.map((i) => i.image_url)].flatMap((url) => (url ? [url] : []));
+  return [row.data.image_url, ...row.data.tray_images.map((i) => i.url), ...row.data.tray_items.map((i) => i.image_url)].flatMap((url) => (url ? [url] : []));
 }
 
 /** Deletes uploaded files from storage (ignores demo images and anything not in our bucket). */
@@ -104,6 +108,8 @@ export async function saveTray(trayId: string, _prev: AdminActionResult | null, 
   if (!sizes.success) return { ok: false, message: `גדלי מגש: ${sizes.error.issues[0]?.message ?? "נתונים לא תקינים"}` };
   const items = trayItemsSchema.safeParse(jsonField(formData.get("items")));
   if (!items.success) return { ok: false, message: `פריטים: ${items.error.issues[0]?.message ?? "נתונים לא תקינים"}` };
+  const images = trayImagesSchema.safeParse(jsonField(formData.get("images")));
+  if (!images.success) return { ok: false, message: `תמונות לראש הדף: ${images.error.issues[0]?.message ?? "נתונים לא תקינים"}` };
   const d = details.data;
   if (d.isActive && (sizes.data.length === 0 || !items.data.some((i) => i.isActive))) {
     return { ok: false, message: "כדי להציג את המגש באתר צריך לפחות גודל אחד ופריט פעיל אחד (או לבטל את הסימון \"מוצג באתר\")." };
@@ -146,6 +152,14 @@ export async function saveTray(trayId: string, _prev: AdminActionResult | null, 
     }))
   );
   if (!itemsSaved) return { ok: false, message: "שמירת הפריטים נכשלה" };
+
+  const imagesSaved = await syncChildren(
+    supabase,
+    "tray_images",
+    id.data,
+    images.data.map((img, i) => ({ id: img.id, values: { url: img.url, alt: img.alt || null, sort_order: i } }))
+  );
+  if (!imagesSaved) return { ok: false, message: "שמירת התמונות נכשלה" };
 
   const after = new Set(await trayImageUrls(supabase, id.data));
   await removeStoredFiles(supabase, before.filter((url) => !after.has(url)));

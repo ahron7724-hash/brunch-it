@@ -7,11 +7,10 @@ import type { Tray } from "@/lib/data/types";
 import { formatPrice } from "@/lib/format";
 
 import styles from "./TraySection.module.css";
-import { TrayStrip } from "./TrayStrip";
 
 type TraySectionProps = { trays: Tray[] };
 
-/** A full section per build-your-own tray: large photo, short pitch, call to action, and a moving strip of what goes in it. */
+/** A full section per build-your-own tray: large photo, short pitch, and call to action. (TrayStrip, a moving strip of its items, is ready to add back below it.) */
 export function TraySection({ trays }: TraySectionProps) {
   if (trays.length === 0) return null;
 
@@ -67,8 +66,6 @@ export function TraySection({ trays }: TraySectionProps) {
                 </ButtonLink>
               </div>
             </div>
-
-            <TrayStrip items={tray.items} reverse={index % 2 === 1} />
           </section>
         );
       })}

@@ -97,6 +97,8 @@ export const trayDetailsSchema = z.object({
   sortOrder: z.coerce.number().int().min(0).max(10000),
 });
 
+export const trayImagesSchema = z.array(productImageInputSchema).max(10, "עד 10 תמונות");
+
 export const traySizesSchema = z
   .array(
     z.object({

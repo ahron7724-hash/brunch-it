@@ -5,6 +5,7 @@ import { ArrowDown, ArrowUp, X } from "lucide-react";
 import Image from "next/image";
 
 import { ImageUploader } from "@/components/admin/ImageUploader/ImageUploader";
+import type { UploadFolder } from "@/lib/admin/uploadImage";
 
 import styles from "./ProductImagesField.module.css";
 
@@ -13,12 +14,12 @@ export type ProductImageValue = { _key: string; id?: string; url: string; alt: s
 type ProductImagesFieldProps = {
   images: ProductImageValue[];
   onChange: (images: ProductImageValue[]) => void;
+  max?: number;
+  folder?: UploadFolder;
 };
 
-const MAX = 3;
-
-/** Up to 3 product images: upload, describe, reorder, remove. Changes are saved with the product. */
-export function ProductImagesField({ images, onChange }: ProductImagesFieldProps) {
+/** Up to `max` images: upload, describe, reorder, remove. Changes are saved with the form they're in. */
+export function ProductImagesField({ images, onChange, max = 3, folder = "products" }: ProductImagesFieldProps) {
   const move = (index: number, delta: number) => {
     const next = [...images];
     const [item] = next.splice(index, 1);
@@ -61,11 +62,11 @@ export function ProductImagesField({ images, onChange }: ProductImagesFieldProps
             </div>
           </li>
         ))}
-        {images.length < MAX && (
+        {images.length < max && (
           <li className={styles.addSlot}>
             <ImageUploader
-              folder="products"
-              label={`הוספת תמונה (${images.length}/${MAX})`}
+              folder={folder}
+              label={`הוספת תמונה (${images.length}/${max})`}
               onUploaded={(url) => onChange([...images, { _key: crypto.randomUUID(), url, alt: "" }])}
             />
           </li>

@@ -106,6 +106,8 @@ export type Tray = {
   slug: string;
   description: string | null;
   imageUrl: string | null;
+  /** Rotating images at the top of the tray page. */
+  heroImages: Image[];
   /** null = use the site default lead time. */
   leadTimeHours: number | null;
   sizes: TraySize[];
