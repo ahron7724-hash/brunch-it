@@ -3,7 +3,8 @@
 .imageLink {
   position: relative;
   display: block;
-  aspect-ratio: 4 / 5;
+  /* Landscape: most product photos are 16:9, so only a little is cropped from the sides. */
+  aspect-ratio: 4 / 3;
   max-inline-size: 100%;
   overflow: hidden;
   background: var(--color-surface);

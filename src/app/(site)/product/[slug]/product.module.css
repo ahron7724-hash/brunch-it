@@ -6,7 +6,8 @@
   padding-block: var(--space-10) var(--space-24);
 }
 
-.layout > :first-child { flex: 1 1 22rem; }
+/* A landscape gallery gets the wider share of the row. */
+.layout > :first-child { flex: 1.5 1 26rem; }
 
 .info {
   display: flex;

@@ -27,17 +27,36 @@
   text-align: center;
 }
 
+/* Landscape photos: the image takes the larger share of the window, details sit beside it
+   (below it on phones). */
 .layout {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-8);
+  align-items: flex-start;
+  gap: var(--space-6) var(--space-10);
 }
 
-.gallery { flex: 1 1 18rem; min-inline-size: 0; }
+.gallery {
+  flex: 1.7 1 26rem;
+  min-inline-size: 0;
+}
+
+/* Phones: the image runs edge to edge of the window. */
+@media (max-width: 39.99em) {
+  .gallery { margin-inline: calc(var(--space-6) * -1); }
+}
+
+/* Wide screens: the image stays in view while the details scroll. */
+@media (min-width: 56em) {
+  .gallery {
+    position: sticky;
+    inset-block-start: 0;
+  }
+}
 
 .info {
   display: flex;
-  flex: 1 1 20rem;
+  flex: 1 1 18rem;
   flex-direction: column;
   gap: var(--space-5);
   min-inline-size: 0;

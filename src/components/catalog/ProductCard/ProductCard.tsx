@@ -18,7 +18,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <article className={styles.card}>
-      <CardMedia href={href} images={product.images} sizes="(min-width: 64em) 25vw, 50vw">
+      <CardMedia href={href} images={product.images} sizes="(min-width: 64em) 25vw, (min-width: 40em) 50vw, 100vw">
         <QuickView productId={product.id} title={product.title} className={styles.quickView} />
       </CardMedia>
 

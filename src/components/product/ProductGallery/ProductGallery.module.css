@@ -5,9 +5,10 @@
   min-inline-size: 0;
 }
 
+/* 16:9, the shape of most product photos, so the large image shows them uncropped. */
 .main {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 16 / 9;
   max-inline-size: 100%;
   overflow: hidden;
   background: var(--color-surface);
@@ -23,8 +24,8 @@
 .thumb {
   position: relative;
   display: block;
-  inline-size: 5.5rem;
-  aspect-ratio: 4 / 5;
+  inline-size: 7rem;
+  aspect-ratio: 16 / 9;
   max-inline-size: 100%;
   padding: 0;
   overflow: hidden;

@@ -23,7 +23,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
             src={current.url}
             alt={current.alt || title}
             fill
-            sizes="(min-width: 56em) 50vw, 100vw"
+            sizes="(min-width: 56em) 60vw, 100vw"
             preload
             className={styles.image}
           />
@@ -41,7 +41,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
                 aria-label={`תמונה ${index + 1}: ${image.alt || title}`}
                 aria-pressed={index === active}
               >
-                <Image src={image.url} alt="" fill sizes="6rem" className={styles.image} />
+                <Image src={image.url} alt="" fill sizes="8rem" className={styles.image} />
               </button>
             </li>
           ))}
