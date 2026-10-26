@@ -12,6 +12,51 @@
   }
 }
 
+/* Rail (more than 4 categories): on desktop, one row that scrolls sideways; phones keep the grid above. */
+.railWrap { position: relative; }
+
+.arrow { display: none; }
+
+@media (min-width: 64em) {
+  .rail {
+    display: flex;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .railItem {
+    flex: 0 0 calc((100% - 3 * var(--space-8)) / 4);
+    scroll-snap-align: start;
+  }
+
+  .arrow {
+    position: absolute;
+    inset-block-start: 40%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--tap-target);
+    min-block-size: var(--tap-target);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-text);
+    transform: translateY(-50%);
+    transition: opacity 200ms var(--ease);
+
+    &:hover:not(:disabled) { color: var(--color-accent); }
+    &:disabled { opacity: 0; pointer-events: none; }
+  }
+
+  /* Over the tile edges rather than outside them, so they never push past the page gutter. */
+  .arrowPrev { inset-inline-start: var(--space-2); }
+  .arrowNext { inset-inline-end: var(--space-2); }
+}
+
 .tile {
   display: flex;
   flex-direction: column;
