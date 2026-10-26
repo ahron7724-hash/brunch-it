@@ -38,8 +38,13 @@ export function OrderEmail({ audience, order, settings }: OrderEmailProps) {
         <div className="card">
           <p className="brand">{settings.businessName}</p>
           <p className="eyebrow">הזמנה מספר {order.orderNumber}</p>
-          <h1>{isOwner ? "התקבלה הזמנה חדשה" : `תודה, ${order.customerName}! קיבלנו את ההזמנה`}</h1>
-          {!isOwner && <p>נעבור על ההזמנה ונאשר אותה מולכם בהקדם. אין צורך לשלם באתר.</p>}
+          <h1>{isOwner ? "התקבלה הזמנה חדשה" : `היי ${order.customerName}, קיבלנו את ההזמנה שלכם!`}</h1>
+          {!isOwner && (
+            <p>
+              ניצור איתכם קשר בהקדם לתשלום ולתיאום הפרטים הסופיים. אין צורך לשלם באתר. ריכזנו כאן את פרטי ההזמנה
+              לנוחותכם.
+            </p>
+          )}
 
           <div className="box">
             <p>
