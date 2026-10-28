@@ -1,5 +1,6 @@
 import { Checkbox } from "@/components/ui/Checkbox/Checkbox";
 import { Field } from "@/components/ui/Field/Field";
+import { Select } from "@/components/ui/Select/Select";
 import type { AdminProduct } from "@/lib/admin/products";
 import { DIET_LABELS } from "@/lib/data/types";
 import { DIET_TAGS } from "@/lib/validation/content";
@@ -49,6 +50,17 @@ export function ProductDetailsFields({ product, categories, defaultLeadTimeHours
         {categories.map((c) => (
           <Checkbox key={c.id} id={`cat-${c.id}`} name="categoryIds" value={c.id} label={c.name} defaultChecked={selected.has(c.id)} />
         ))}
+        {categories.length > 0 && (
+          <Select
+            id="primaryCategoryId"
+            label="קטגוריה ראשית בקטלוג"
+            defaultValue={product.primary_category_id ?? ""}
+            options={[{ value: "", label: "אוטומטי – הראשונה לפי סדר הקטגוריות" }, ...categories.map((c) => ({ value: c.id, label: c.name }))]}
+          />
+        )}
+        {categories.length > 0 && (
+          <p className={styles.note}>בקטלוג המוצר מופיע פעם אחת, תחת הקטגוריה הראשית. בדפי הקטגוריות הוא מופיע בכל הקטגוריות שסומנו.</p>
+        )}
       </fieldset>
 
       <fieldset className={styles.group}>

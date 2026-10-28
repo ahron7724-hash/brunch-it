@@ -1,3 +1,5 @@
 .categories { margin-block-end: var(--space-20); }
 
 .products { padding-block-end: var(--space-24); }
+
+.group { margin-block-start: var(--space-16); }

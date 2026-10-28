@@ -89,6 +89,7 @@ export async function saveProduct(productId: string, _prev: AdminActionResult | 
     leadTimeHours: formData.get("leadTimeHours"),
     dietTags: formData.getAll("dietTags"),
     categoryIds: formData.getAll("categoryIds"),
+    primaryCategoryId: formData.get("primaryCategoryId") ?? "",
     allowsCustomText: formData.get("allowsCustomText"),
     customTextLabel: formData.get("customTextLabel") ?? "",
     isActive: formData.get("isActive"),
@@ -103,6 +104,8 @@ export async function saveProduct(productId: string, _prev: AdminActionResult | 
   const images = productImagesSchema.safeParse(jsonField(formData.get("images")));
   if (!images.success) return { ok: false, message: `תמונות: ${images.error.issues[0]?.message ?? "נתונים לא תקינים"}` };
   const d = details.data;
+  // The main category is always one of the product's categories.
+  if (d.primaryCategoryId && !d.categoryIds.includes(d.primaryCategoryId)) d.categoryIds.push(d.primaryCategoryId);
   if (d.isActive && sizes.data.length === 0) {
     return { ok: false, message: "כדי להציג את המוצר באתר צריך לפחות גודל אחד עם מחיר (או לבטל את הסימון \"מוצג באתר\")." };
   }
@@ -120,6 +123,7 @@ export async function saveProduct(productId: string, _prev: AdminActionResult | 
       contents: d.contents,
       min_lead_time_hours: d.leadTimeHours,
       diet_tags: d.dietTags,
+      primary_category_id: d.primaryCategoryId || null,
       allows_custom_text: d.allowsCustomText,
       custom_text_label: d.customTextLabel,
       is_active: d.isActive,

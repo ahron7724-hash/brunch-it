@@ -53,6 +53,7 @@ export const productOptionRowSchema = z.object({
 });
 
 const categoryLinkSchema = z.object({
+  category_id: z.string().uuid(),
   categories: z.object({ name: z.string().max(80), slug: z.string().max(100) }).nullable(),
 });
 
@@ -66,6 +67,7 @@ export const productRowSchema = z.object({
   diet_tags: z.array(z.string()).transform((tags) => tags.filter((t): t is DietTag => dietTagSchema.safeParse(t).success)),
   allows_custom_text: z.boolean(),
   custom_text_label: z.string().max(80).nullable(),
+  primary_category_id: z.string().uuid().nullable().catch(null),
   is_featured: z.boolean(),
   sort_order: z.number().int(),
   // Invalid nested rows are dropped rather than failing the whole product.

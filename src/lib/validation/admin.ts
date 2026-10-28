@@ -35,6 +35,8 @@ export const productDetailsSchema = z.object({
   leadTimeHours: optionalInt(0, 24 * 60),
   dietTags: z.array(z.enum(DIET_TAGS)).max(4),
   categoryIds: z.array(uuid).max(50),
+  /** "" = automatic (the first of its categories by category order). */
+  primaryCategoryId: z.union([z.literal(""), uuid]),
   allowsCustomText: checkbox,
   customTextLabel: optionalText(80),
   isActive: checkbox,

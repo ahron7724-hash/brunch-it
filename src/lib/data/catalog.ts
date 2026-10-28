@@ -12,11 +12,11 @@ type ProductRow = z.infer<typeof productRowSchema>;
 
 const PRODUCT_COLUMNS = `
   id, title, slug, description, contents, min_lead_time_hours, diet_tags,
-  allows_custom_text, custom_text_label, is_featured, sort_order,
+  allows_custom_text, custom_text_label, primary_category_id, is_featured, sort_order,
   product_images ( url, alt, sort_order ),
   product_sizes ( id, label, price, serves, sort_order ),
   product_options ( id, group_name, label, extra_price, sort_order, is_active ),
-  product_categories ( categories ( name, slug ) )
+  product_categories ( category_id, categories ( name, slug ) )
 `;
 
 export type ProductSort = "default" | "price-asc" | "price-desc";
@@ -146,6 +146,7 @@ function toSummary(row: ProductRow): ProductSummary {
     dietTags: row.diet_tags,
     leadTimeHours: row.min_lead_time_hours,
     categories: row.product_categories.flatMap((link) => (link.categories ? [link.categories] : [])),
+    mainCategorySlug: row.product_categories.find((link) => link.category_id === row.primary_category_id)?.categories?.slug ?? null,
   };
 }
 

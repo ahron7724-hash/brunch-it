@@ -41,6 +41,8 @@ export type ProductSummary = {
   /** null = use the site default lead time. */
   leadTimeHours: number | null;
   categories: CategoryRef[];
+  /** The category chosen as main for the grouped catalog; null = first of its categories by category order. */
+  mainCategorySlug: string | null;
 };
 
 export type ProductDetail = ProductSummary & {
