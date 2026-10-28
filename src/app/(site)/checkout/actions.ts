@@ -54,8 +54,13 @@ async function processOrder(_prev: CheckoutState, formData: FormData): Promise<C
   const late = priced.lines.find((l) => !isReadyBy(l.leadTimeHours ?? booking.defaultLeadTimeHours, day.date, slot, now));
   if (late) return { ok: false, message: `"${late.title}" לא יספיק להיות מוכן למועד שנבחר. נא לבחור מועד מאוחר יותר.` };
 
-  // 3. Delivery zone and minimum order, from the database.
+  // 3. Products minimum (trays don't count), delivery zone and its minimum, from the database.
   const subtotal = priced.lines.reduce((sum, l) => sum + l.lineTotal, 0);
+  const productLines = priced.lines.filter((l) => l.productId !== null);
+  const productsSubtotal = productLines.reduce((sum, l) => sum + l.lineTotal, 0);
+  if (productLines.length > 0 && productsSubtotal < settings.productsMinOrder) {
+    return { ok: false, message: `מינימום הזמנה למוצרים (לא כולל מגשים): ₪${settings.productsMinOrder}. נא להוסיף מוצרים להזמנה.` };
+  }
   let deliveryFee = 0;
   let zoneName: string | null = null;
   if (input.fulfillment === "delivery") {

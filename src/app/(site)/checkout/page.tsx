@@ -20,6 +20,7 @@ export default async function CheckoutPage() {
         zones={settings.deliveryEnabled ? zones : []}
         pickupAddress={settings.pickupAddress}
         pickupMapUrl={settings.pickupMapUrl}
+        productsMinOrder={settings.productsMinOrder}
       />
     </>
   );

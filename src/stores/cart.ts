@@ -71,3 +71,13 @@ export function cartCount(items: CartItem[]): number {
 export function cartTotal(items: CartItem[]): number {
   return items.reduce((sum, i) => sum + i.unitPrice * i.quantity, 0);
 }
+
+/**
+ * How much more the customer must add in regular products to reach the products minimum.
+ * Trays don't count, and a cart with no products has no minimum. 0 = nothing missing.
+ */
+export function productsShortfall(items: CartItem[], minimum: number): number {
+  const products = items.filter((i) => i.kind !== "tray");
+  if (products.length === 0) return 0;
+  return Math.max(0, minimum - cartTotal(products));
+}

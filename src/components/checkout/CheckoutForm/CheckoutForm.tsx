@@ -13,15 +13,16 @@ import { useHydrated } from "@/hooks/useHydrated";
 import type { DeliveryZone } from "@/lib/data/delivery";
 import type { CheckoutState } from "@/lib/validation/order";
 import { useBooking } from "@/stores/booking";
-import { useCart } from "@/stores/cart";
+import { formatPrice } from "@/lib/format";
+import { productsShortfall, useCart } from "@/stores/cart";
 
 import styles from "./CheckoutForm.module.css";
 
-type CheckoutFormProps = { zones: DeliveryZone[]; pickupAddress: string; pickupMapUrl: string };
+type CheckoutFormProps = { zones: DeliveryZone[]; pickupAddress: string; pickupMapUrl: string; productsMinOrder: number };
 
 const initialState: CheckoutState = { ok: false };
 
-export function CheckoutForm({ zones, pickupAddress, pickupMapUrl }: CheckoutFormProps) {
+export function CheckoutForm({ zones, pickupAddress, pickupMapUrl, productsMinOrder }: CheckoutFormProps) {
   const hydrated = useHydrated();
   const items = useCart((s) => s.items);
   const pickupDate = useBooking((s) => s.pickupDate);
@@ -51,6 +52,7 @@ export function CheckoutForm({ zones, pickupAddress, pickupMapUrl }: CheckoutFor
   }
 
   const deliveryFee = fulfillment === "delivery" ? (zones.find((z) => z.id === zoneId)?.price ?? 0) : 0;
+  const shortfall = productsShortfall(items, productsMinOrder);
   const cart = JSON.stringify(
     items.map((i) => ({
       productId: i.productId,
@@ -102,7 +104,17 @@ export function CheckoutForm({ zones, pickupAddress, pickupMapUrl }: CheckoutFor
           </p>
         )}
 
-        {pickupDate ? (
+        {shortfall > 0 && (
+          <p role="status" className={styles.error}>
+            מינימום הזמנה למוצרים: {formatPrice(productsMinOrder)} (לא כולל מגשים). חסרים עוד {formatPrice(shortfall)} כדי לשלוח את ההזמנה.
+          </p>
+        )}
+
+        {shortfall > 0 ? (
+          <ButtonLink href="/catalog" variant="line" className={styles.submit}>
+            להוספת מוצרים
+          </ButtonLink>
+        ) : pickupDate ? (
           <Button type="submit" disabled={isPending} className={styles.submit}>
             {isPending ? "שולחים…" : "אישור ושליחת ההזמנה"}
           </Button>

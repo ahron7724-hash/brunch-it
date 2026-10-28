@@ -59,6 +59,20 @@ export default async function SettingsPage() {
           </div>
           <Field id="kashrutLine" label="שורת כשרות (בתחתית ובדף הבית)" maxLength={120} required={false} defaultValue={s.kashrutLine} hint="למשל: כשר חלבי, חלב ישראל" />
         </Panel>
+
+        <Panel title="מינימום הזמנה למוצרים" description="סכום מינימלי למוצרים בהזמנה. המגשים לא נספרים, והזמנה של מגשים בלבד לא צריכה לעמוד במינימום.">
+          <Field
+            id="productsMinOrder"
+            label="מינימום למוצרים (₪)"
+            type="number"
+            min={0}
+            max={100000}
+            maxLength={6}
+            required={false}
+            defaultValue={s.productsMinOrder}
+            hint="0 = ללא מינימום"
+          />
+        </Panel>
       </AdminForm>
     </>
   );

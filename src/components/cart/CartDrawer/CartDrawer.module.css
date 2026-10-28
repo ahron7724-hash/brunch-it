@@ -44,6 +44,13 @@
   font-variant-numeric: tabular-nums;
 }
 
+.minimum {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  border-inline-start: 2px solid var(--color-accent);
+  background: var(--color-surface);
+}
+
 .checkout { inline-size: 100%; }
 
 .empty {

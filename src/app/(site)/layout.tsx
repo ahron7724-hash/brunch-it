@@ -27,7 +27,7 @@ export default async function SiteLayout({ children }: Readonly<{ children: Reac
       <Footer settings={settings} />
       <PickupButton />
       <PickupPicker />
-      <CartDrawer />
+      <CartDrawer productsMinOrder={settings.productsMinOrder} />
     </BookingConfigProvider>
   );
 }

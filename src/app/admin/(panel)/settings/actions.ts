@@ -33,6 +33,7 @@ const settingsSchema = z.object({
   pickupAddress: text(200),
   pickupMapUrl: z.union([z.literal(""), z.string().trim().url("קישור לא תקין").max(2048).refine((v) => v.startsWith("https://"), "הקישור צריך להתחיל ב-https://")]),
   kashrutLine: text(120),
+  productsMinOrder: z.coerce.number({ message: "מינימום הזמנה צריך להיות מספר" }).min(0, "מינימום הזמנה לא יכול להיות שלילי").max(100_000, "מינימום הזמנה גבוה מדי"),
 });
 
 export async function saveSettings(_prev: AdminActionResult | null, formData: FormData): Promise<AdminActionResult> {
@@ -57,6 +58,7 @@ export async function saveSettings(_prev: AdminActionResult | null, formData: Fo
     pickupAddress: field("pickupAddress"),
     pickupMapUrl: field("pickupMapUrl"),
     kashrutLine: field("kashrutLine"),
+    productsMinOrder: field("productsMinOrder") || 0,
   });
   if (!parsed.success) return { ok: false, message: parsed.error.issues[0]?.message ?? "נתונים לא תקינים" };
   const d = parsed.data;
@@ -79,6 +81,7 @@ export async function saveSettings(_prev: AdminActionResult | null, formData: Fo
     pickupAddress: d.pickupAddress,
     pickupMapUrl: d.pickupMapUrl,
     kashrutLine: d.kashrutLine,
+    productsMinOrder: d.productsMinOrder,
   });
   if (!saved) return { ok: false, message: "השמירה נכשלה" };
 

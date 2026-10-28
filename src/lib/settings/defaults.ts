@@ -34,6 +34,8 @@ export type SiteSettings = {
   kashrutLine: string;
   defaultLeadTimeHours: number;
   deliveryEnabled: boolean;
+  /** Minimum ₪ for the regular products in an order (trays don't count). 0 = no minimum. */
+  productsMinOrder: number;
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -61,4 +63,5 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   kashrutLine: "",
   defaultLeadTimeHours: 48,
   deliveryEnabled: true,
+  productsMinOrder: 0,
 };

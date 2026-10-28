@@ -37,4 +37,5 @@ export const siteSettingsSchema = z.object({
   kashrutLine: shortText(120).catch(d.kashrutLine),
   defaultLeadTimeHours: z.number().int().min(0).max(24 * 60).catch(d.defaultLeadTimeHours),
   deliveryEnabled: z.boolean().catch(d.deliveryEnabled),
+  productsMinOrder: z.number().min(0).max(100_000).catch(d.productsMinOrder),
 });
