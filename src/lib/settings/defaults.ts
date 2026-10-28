@@ -37,7 +37,7 @@ export type SiteSettings = {
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
-  businessName: "לאה",
+  businessName: "Brunch it",
   tagline: "BOUTIQUE PATISSERIE",
   logoUrl: null,
   colors: {
