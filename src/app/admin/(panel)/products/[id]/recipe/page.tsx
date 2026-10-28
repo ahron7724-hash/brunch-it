@@ -3,18 +3,18 @@ import { notFound } from "next/navigation";
 import { AdminHeader } from "@/components/admin/AdminHeader/AdminHeader";
 import { RecipeEditor } from "@/components/admin/RecipeEditor/RecipeEditor";
 import { getAdminProduct } from "@/lib/admin/products";
-import { getRecipeNotes, listMaterials, listPrepSteps, listRecipes } from "@/lib/inventory/data";
+import { getRecipeText, listMaterials, listPrepSteps, listRecipes } from "@/lib/inventory/data";
 
 type RecipePageProps = { params: Promise<{ id: string }> };
 
 export default async function RecipePage({ params }: RecipePageProps) {
   const { id } = await params;
-  const [product, materials, recipes, steps, notes] = await Promise.all([
+  const [product, materials, recipes, steps, text] = await Promise.all([
     getAdminProduct(id),
     listMaterials(),
     listRecipes(id),
     listPrepSteps(id),
-    getRecipeNotes(id),
+    getRecipeText(id),
   ]);
   if (!product) notFound();
 
@@ -28,7 +28,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
     <>
       <AdminHeader
         title={`מתכון: ${product.title}`}
-        description="כמויות ליחידה אחת. המערכת מכפילה במספר היחידות במארז ובמספר המארזים בהזמנה."
+        description="למעלה המתכון הכתוב כמו שמכינים אותו. למטה חומרי הגלם למלאי – כמויות ליחידה אחת, והמערכת מכפילה לפי ההזמנות."
         back={{ href: `/admin/products/${product.id}`, label: product.title }}
       />
       <RecipeEditor
@@ -38,7 +38,8 @@ export default async function RecipePage({ params }: RecipePageProps) {
         sizes={product.product_sizes.map((s) => ({ label: s.label, unitCount: s.unit_count }))}
         sections={sections}
         steps={steps.map((s) => ({ id: s.id, title: s.title, daysBefore: String(s.daysBefore) }))}
-        notes={notes}
+        recipe={text.recipe}
+        notes={text.notes}
       />
     </>
   );

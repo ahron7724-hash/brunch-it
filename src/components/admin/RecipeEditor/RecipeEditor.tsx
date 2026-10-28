@@ -37,26 +37,35 @@ type RecipeEditorProps = {
   /** Saved recipe rows by section ("base" or option id). */
   sections: Record<string, Record<string, string>[]>;
   steps: Record<string, string>[];
+  /** The written recipe as the admin bakes it; separate from the stock rows. */
+  recipe: string;
   /** The admin's own free-text notes; never shown to customers. */
   notes: string;
 };
 
 /** The recipe page: base ingredients, extra ingredients per flavor, and prep steps, with one save button. */
-export function RecipeEditor({ productId, materials, options, sizes, sections: savedSections, steps: savedSteps, notes: savedNotes }: RecipeEditorProps) {
+export function RecipeEditor({ productId, materials, options, sizes, sections: savedSections, steps: savedSteps, recipe: savedRecipe, notes: savedNotes }: RecipeEditorProps) {
   const byId = new Map(materials.map((m) => [m.id, m]));
   const [sections, setSections] = useState(() => toSections(savedSections));
   const [steps, setSteps] = useState(() => toEditableRows(savedSteps));
+  const [recipe, setRecipe] = useState(savedRecipe);
   const [notes, setNotes] = useState(savedNotes);
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
   const [isPending, startTransition] = useTransition();
   const [batch, setBatch] = useState(String(sizes[0]?.unitCount ?? 1));
 
   // After a save the server sends fresh rows (new steps get ids); take them in.
-  const [synced, setSynced] = useState({ savedSections, savedSteps, savedNotes });
-  if (synced.savedSections !== savedSections || synced.savedSteps !== savedSteps || synced.savedNotes !== savedNotes) {
-    setSynced({ savedSections, savedSteps, savedNotes });
+  const [synced, setSynced] = useState({ savedSections, savedSteps, savedRecipe, savedNotes });
+  if (
+    synced.savedSections !== savedSections ||
+    synced.savedSteps !== savedSteps ||
+    synced.savedRecipe !== savedRecipe ||
+    synced.savedNotes !== savedNotes
+  ) {
+    setSynced({ savedSections, savedSteps, savedRecipe, savedNotes });
     setSections(toSections(savedSections));
     setSteps(toEditableRows(savedSteps));
+    setRecipe(savedRecipe);
     setNotes(savedNotes);
   }
 
@@ -104,7 +113,7 @@ export function RecipeEditor({ productId, materials, options, sizes, sections: s
     }
     const stepRows = fromEditableRows(steps, STEP_COLUMNS).map((s) => ({ id: s.id, title: s.title, daysBefore: s.daysBefore || "0" }));
     startTransition(async () => {
-      const result = await saveRecipe(productId, { items, steps: stepRows, notes });
+      const result = await saveRecipe(productId, { items, steps: stepRows, recipe, notes });
       setMessage({ ok: result.ok, text: result.ok ? (result.message ?? "נשמר") : result.message });
     });
   };
@@ -129,16 +138,54 @@ export function RecipeEditor({ productId, materials, options, sizes, sections: s
     { key: BASE, title: "בסיס", lines: ingredientLines(sections[BASE] ?? []) },
     ...options.map((o) => ({ key: o.id, title: `טעם: ${o.label}`, lines: ingredientLines(sections[o.id] ?? []) })),
   ].filter((s) => s.lines.length > 0);
-  const batchSteps = fromEditableRows(steps, STEP_COLUMNS).filter((s) => s.title);
 
   return (
     <div className={styles.editor}>
-      <Panel title="בסיס – משותף לכל הטעמים" description="בצק, מלית וכל מה שזהה בכל הטעמים. כמות להכנת יחידה אחת (קיש אחד).">
+      <Panel title="המתכון" description="המתכון הכתוב, בדיוק כמו שמכינים אותו: רכיבים, כמויות ואופן הכנה. לא קשור למלאי.">
+        <label htmlFor="recipe-text" className={styles.visuallyHidden}>
+          המתכון
+        </label>
+        <textarea
+          id="recipe-text"
+          rows={18}
+          maxLength={6000}
+          value={recipe}
+          onChange={(e) => {
+            setRecipe(e.target.value);
+            setMessage(null);
+          }}
+          placeholder="מדביקים כאן את המתכון המלא…"
+          className={styles.notes}
+        />
+      </Panel>
+
+      <Panel title="הערות שלי" description="מה למדת כשהכנת: כמה יצא, מה שינית, מה עדיף. רק בניהול – לקוחות לא רואים.">
+        <label htmlFor="recipe-notes" className={styles.visuallyHidden}>
+          הערות שלי
+        </label>
+        <textarea
+          id="recipe-notes"
+          rows={5}
+          maxLength={2000}
+          value={notes}
+          onChange={(e) => {
+            setNotes(e.target.value);
+            setMessage(null);
+          }}
+          placeholder="למשל: יצא 15 לחמניות בגודל מעולה. במקום הברשת ביצה – פידור קמח."
+          className={styles.notes}
+        />
+      </Panel>
+
+      <Panel
+        title="חומרי גלם למלאי – בסיס"
+        description="זה לא המתכון. רק מה שיורד מהמלאי בכל הזמנה, ליחידה אחת (כולל מילוי). מים וכל מה שלא נספר במלאי לא מופיעים כאן."
+      >
         <RowsField columns={columns} rows={sections[BASE] ?? []} onChange={edit(BASE)} maxRows={60} addLabel="הוספת רכיב" emptyText="אין עדיין רכיבים בבסיס." />
       </Panel>
 
       {options.map((option) => (
-        <Panel key={option.id} title={`טעם: ${option.label}`} description="רק מה שמיוחד לטעם הזה. נספר רק כשהלקוח בחר בו.">
+        <Panel key={option.id} title={`חומרי גלם למלאי – טעם: ${option.label}`} description="רק מה שמיוחד לטעם הזה. נספר רק כשהלקוח בחר בו.">
           <RowsField
             columns={columns}
             rows={sections[option.id] ?? []}
@@ -164,26 +211,8 @@ export function RecipeEditor({ productId, materials, options, sizes, sections: s
         />
       </Panel>
 
-      <Panel title="הערות שלי" description="מה למדת כשהכנת: כמה יצא, מה שינית, מה עדיף. רק בניהול – לקוחות לא רואים.">
-        <label htmlFor="recipe-notes" className={styles.visuallyHidden}>
-          הערות שלי
-        </label>
-        <textarea
-          id="recipe-notes"
-          rows={5}
-          maxLength={2000}
-          value={notes}
-          onChange={(e) => {
-            setNotes(e.target.value);
-            setMessage(null);
-          }}
-          placeholder="למשל: יצא 15 לחמניות בגודל מעולה. במקום הברשת ביצה – פידור קמח."
-          className={styles.notes}
-        />
-      </Panel>
-
-      {(batchSections.length > 0 || batchSteps.length > 0 || notes.trim()) && (
-        <Panel title="מתכון מלא" description="כותבים כמה יחידות מכינים ומקבלים את כל הכמויות ואת שלבי ההכנה. רק לתצוגה – לא משנה את המתכון השמור.">
+      {batchSections.length > 0 && (
+        <Panel title="חישוב חומרי גלם למלאי" description="כמה חומר גלם יורד מהמלאי לכמות יחידות. זה לא המתכון – המתכון הכתוב נמצא למעלה.">
           <div className={styles.batchField}>
             <label htmlFor="recipe-batch">כמה יחידות מכינים?</label>
             <input
@@ -211,22 +240,6 @@ export function RecipeEditor({ productId, materials, options, sizes, sections: s
                   </ul>
                 </section>
               ))}
-              {batchSteps.length > 0 && (
-                <section>
-                  <h3 className={styles.fullRecipeHeading}>שלבי הכנה</h3>
-                  <ol className={styles.steps}>
-                    {batchSteps.map((step, i) => (
-                      <li key={step.id ?? i}>{step.title}</li>
-                    ))}
-                  </ol>
-                </section>
-              )}
-              {notes.trim() && (
-                <section>
-                  <h3 className={styles.fullRecipeHeading}>הערות שלי</h3>
-                  <p className={styles.notesText}>{notes.trim()}</p>
-                </section>
-              )}
             </div>
           ) : (
             <p className={styles.muted}>כותבים מספר יחידות גדול מ-0.</p>

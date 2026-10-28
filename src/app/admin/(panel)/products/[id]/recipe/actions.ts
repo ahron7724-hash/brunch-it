@@ -22,6 +22,7 @@ const stepSchema = z.object({
 const recipeSchema = z.object({
   items: z.array(itemSchema).max(300),
   steps: z.array(stepSchema).max(30, "עד 30 שלבים"),
+  recipe: z.string().trim().max(6000, "המתכון ארוך מדי (עד 6000 תווים)"),
   notes: z.string().trim().max(2000, "ההערות ארוכות מדי (עד 2000 תווים)"),
 });
 
@@ -43,11 +44,12 @@ export async function saveRecipe(productId: string, input: unknown): Promise<Adm
   });
   if (error) return { ok: false, message: "שמירת המתכון נכשלה" };
 
-  const { notes } = parsed.data;
-  const { error: notesError } = notes
-    ? await supabase.from("recipe_notes").upsert({ product_id: id.data, notes })
-    : await supabase.from("recipe_notes").delete().eq("product_id", id.data);
-  if (notesError) return { ok: false, message: "המתכון נשמר, אבל שמירת ההערות נכשלה" };
+  const { recipe, notes } = parsed.data;
+  const { error: textError } =
+    recipe || notes
+      ? await supabase.from("recipe_notes").upsert({ product_id: id.data, recipe: recipe || null, notes: notes || null })
+      : await supabase.from("recipe_notes").delete().eq("product_id", id.data);
+  if (textError) return { ok: false, message: "חומרי הגלם נשמרו, אבל שמירת המתכון הכתוב וההערות נכשלה" };
 
   revalidatePath(`/admin/products/${id.data}/recipe`);
   revalidatePath("/admin/production");
