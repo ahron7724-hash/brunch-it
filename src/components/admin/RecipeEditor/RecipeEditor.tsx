@@ -46,6 +46,7 @@ export function RecipeEditor({ productId, materials, options, sizes, sections: s
   const [steps, setSteps] = useState(() => toEditableRows(savedSteps));
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [batch, setBatch] = useState(String(sizes[0]?.unitCount ?? 1));
 
   // After a save the server sends fresh rows (new steps get ids); take them in.
   const [synced, setSynced] = useState({ savedSections, savedSteps });
@@ -110,6 +111,22 @@ export function RecipeEditor({ productId, materials, options, sizes, sections: s
     return material && material.tracking === "measured" && amount > 0 ? [{ material, amount }] : [];
   });
 
+  // Full recipe for any batch size, from the rows as they are on screen (saved or not).
+  const batchCount = Number(batch);
+  const ingredientLines = (rows: EditableRow[]) =>
+    rows.flatMap((row) => {
+      const material = byId.get(row.materialId ?? "");
+      if (!material) return [];
+      const amount = Number(row.amount);
+      const text = material.tracking === "manual" || !(amount > 0) ? "לפי הצורך" : formatAmount(amount * batchCount, material.unit);
+      return [{ name: material.name, text }];
+    });
+  const batchSections = [
+    { key: BASE, title: "בסיס", lines: ingredientLines(sections[BASE] ?? []) },
+    ...options.map((o) => ({ key: o.id, title: `טעם: ${o.label}`, lines: ingredientLines(sections[o.id] ?? []) })),
+  ].filter((s) => s.lines.length > 0);
+  const batchSteps = fromEditableRows(steps, STEP_COLUMNS).filter((s) => s.title);
+
   return (
     <div className={styles.editor}>
       <Panel title="בסיס – משותף לכל הטעמים" description="בצק, מלית וכל מה שזהה בכל הטעמים. כמות להכנת יחידה אחת (קיש אחד).">
@@ -142,6 +159,52 @@ export function RecipeEditor({ productId, materials, options, sizes, sections: s
           emptyText="אין שלבי הכנה. למשל: בצק ותחתיות – יומיים לפני; מלית ואפייה – יום לפני; אריזה – ביום האיסוף."
         />
       </Panel>
+
+      {(batchSections.length > 0 || batchSteps.length > 0) && (
+        <Panel title="מתכון מלא" description="כותבים כמה יחידות מכינים ומקבלים את כל הכמויות ואת שלבי ההכנה. רק לתצוגה – לא משנה את המתכון השמור.">
+          <div className={styles.batchField}>
+            <label htmlFor="recipe-batch">כמה יחידות מכינים?</label>
+            <input
+              id="recipe-batch"
+              type="number"
+              inputMode="numeric"
+              min={1}
+              max={10000}
+              value={batch}
+              onChange={(e) => setBatch(e.target.value)}
+              className={styles.batchInput}
+            />
+          </div>
+          {batchCount > 0 ? (
+            <div className={styles.fullRecipe}>
+              {batchSections.map((section) => (
+                <section key={section.key}>
+                  {batchSections.length > 1 && <h3 className={styles.fullRecipeHeading}>{section.title}</h3>}
+                  <ul role="list" className={styles.preview}>
+                    {section.lines.map((line) => (
+                      <li key={line.name}>
+                        <strong>{line.text}</strong> {line.name}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+              {batchSteps.length > 0 && (
+                <section>
+                  <h3 className={styles.fullRecipeHeading}>שלבי הכנה</h3>
+                  <ol className={styles.steps}>
+                    {batchSteps.map((step, i) => (
+                      <li key={step.id ?? i}>{step.title}</li>
+                    ))}
+                  </ol>
+                </section>
+              )}
+            </div>
+          ) : (
+            <p className={styles.muted}>כותבים מספר יחידות גדול מ-0.</p>
+          )}
+        </Panel>
+      )}
 
       {sizes.length > 0 && baseTotals.length > 0 && (
         <Panel title="תצוגה מקדימה" description="כמה צורך מארז אחד מכל גודל (בסיס בלבד, בלי רכיבי הטעם).">
