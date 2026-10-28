@@ -37,23 +37,27 @@ type RecipeEditorProps = {
   /** Saved recipe rows by section ("base" or option id). */
   sections: Record<string, Record<string, string>[]>;
   steps: Record<string, string>[];
+  /** The admin's own free-text notes; never shown to customers. */
+  notes: string;
 };
 
 /** The recipe page: base ingredients, extra ingredients per flavor, and prep steps, with one save button. */
-export function RecipeEditor({ productId, materials, options, sizes, sections: savedSections, steps: savedSteps }: RecipeEditorProps) {
+export function RecipeEditor({ productId, materials, options, sizes, sections: savedSections, steps: savedSteps, notes: savedNotes }: RecipeEditorProps) {
   const byId = new Map(materials.map((m) => [m.id, m]));
   const [sections, setSections] = useState(() => toSections(savedSections));
   const [steps, setSteps] = useState(() => toEditableRows(savedSteps));
+  const [notes, setNotes] = useState(savedNotes);
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
   const [isPending, startTransition] = useTransition();
   const [batch, setBatch] = useState(String(sizes[0]?.unitCount ?? 1));
 
   // After a save the server sends fresh rows (new steps get ids); take them in.
-  const [synced, setSynced] = useState({ savedSections, savedSteps });
-  if (synced.savedSections !== savedSections || synced.savedSteps !== savedSteps) {
-    setSynced({ savedSections, savedSteps });
+  const [synced, setSynced] = useState({ savedSections, savedSteps, savedNotes });
+  if (synced.savedSections !== savedSections || synced.savedSteps !== savedSteps || synced.savedNotes !== savedNotes) {
+    setSynced({ savedSections, savedSteps, savedNotes });
     setSections(toSections(savedSections));
     setSteps(toEditableRows(savedSteps));
+    setNotes(savedNotes);
   }
 
   if (materials.length === 0) {
@@ -100,7 +104,7 @@ export function RecipeEditor({ productId, materials, options, sizes, sections: s
     }
     const stepRows = fromEditableRows(steps, STEP_COLUMNS).map((s) => ({ id: s.id, title: s.title, daysBefore: s.daysBefore || "0" }));
     startTransition(async () => {
-      const result = await saveRecipe(productId, { items, steps: stepRows });
+      const result = await saveRecipe(productId, { items, steps: stepRows, notes });
       setMessage({ ok: result.ok, text: result.ok ? (result.message ?? "נשמר") : result.message });
     });
   };
@@ -160,7 +164,25 @@ export function RecipeEditor({ productId, materials, options, sizes, sections: s
         />
       </Panel>
 
-      {(batchSections.length > 0 || batchSteps.length > 0) && (
+      <Panel title="הערות שלי" description="מה למדת כשהכנת: כמה יצא, מה שינית, מה עדיף. רק בניהול – לקוחות לא רואים.">
+        <label htmlFor="recipe-notes" className={styles.visuallyHidden}>
+          הערות שלי
+        </label>
+        <textarea
+          id="recipe-notes"
+          rows={5}
+          maxLength={2000}
+          value={notes}
+          onChange={(e) => {
+            setNotes(e.target.value);
+            setMessage(null);
+          }}
+          placeholder="למשל: יצא 15 לחמניות בגודל מעולה. במקום הברשת ביצה – פידור קמח."
+          className={styles.notes}
+        />
+      </Panel>
+
+      {(batchSections.length > 0 || batchSteps.length > 0 || notes.trim()) && (
         <Panel title="מתכון מלא" description="כותבים כמה יחידות מכינים ומקבלים את כל הכמויות ואת שלבי ההכנה. רק לתצוגה – לא משנה את המתכון השמור.">
           <div className={styles.batchField}>
             <label htmlFor="recipe-batch">כמה יחידות מכינים?</label>
@@ -197,6 +219,12 @@ export function RecipeEditor({ productId, materials, options, sizes, sections: s
                       <li key={step.id ?? i}>{step.title}</li>
                     ))}
                   </ol>
+                </section>
+              )}
+              {notes.trim() && (
+                <section>
+                  <h3 className={styles.fullRecipeHeading}>הערות שלי</h3>
+                  <p className={styles.notesText}>{notes.trim()}</p>
                 </section>
               )}
             </div>

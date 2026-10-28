@@ -3,13 +3,19 @@ import { notFound } from "next/navigation";
 import { AdminHeader } from "@/components/admin/AdminHeader/AdminHeader";
 import { RecipeEditor } from "@/components/admin/RecipeEditor/RecipeEditor";
 import { getAdminProduct } from "@/lib/admin/products";
-import { listMaterials, listPrepSteps, listRecipes } from "@/lib/inventory/data";
+import { getRecipeNotes, listMaterials, listPrepSteps, listRecipes } from "@/lib/inventory/data";
 
 type RecipePageProps = { params: Promise<{ id: string }> };
 
 export default async function RecipePage({ params }: RecipePageProps) {
   const { id } = await params;
-  const [product, materials, recipes, steps] = await Promise.all([getAdminProduct(id), listMaterials(), listRecipes(id), listPrepSteps(id)]);
+  const [product, materials, recipes, steps, notes] = await Promise.all([
+    getAdminProduct(id),
+    listMaterials(),
+    listRecipes(id),
+    listPrepSteps(id),
+    getRecipeNotes(id),
+  ]);
   if (!product) notFound();
 
   const sections: Record<string, Record<string, string>[]> = {};
@@ -32,6 +38,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
         sizes={product.product_sizes.map((s) => ({ label: s.label, unitCount: s.unit_count }))}
         sections={sections}
         steps={steps.map((s) => ({ id: s.id, title: s.title, daysBefore: String(s.daysBefore) }))}
+        notes={notes}
       />
     </>
   );

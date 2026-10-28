@@ -96,6 +96,14 @@ export async function listPrepSteps(productId?: string): Promise<PrepStep[]> {
   }));
 }
 
+/** The admin's free-text notes on one recipe ("" when there are none). */
+export async function getRecipeNotes(productId: string): Promise<string> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("recipe_notes").select("notes").eq("product_id", productId).maybeSingle();
+  if (error || !data) return "";
+  return z.object({ notes: z.string() }).safeParse(data).data?.notes ?? "";
+}
+
 const orderRowSchema = z.object({
   id: z.string().uuid(),
   pickup_date: z.string(),
