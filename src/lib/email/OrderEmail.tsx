@@ -68,7 +68,7 @@ export function OrderEmail({ audience, order, settings }: OrderEmailProps) {
                     {line.options.length > 0 && (
                       <div className="muted">{line.options.map((o) => `${o.group}: ${o.label}`).join(" · ")}</div>
                     )}
-                    {line.customText && <div className="muted">כיתוב: {line.customText}</div>}
+                    {line.customText && <div className="muted">הערה: {line.customText}</div>}
                   </td>
                   <td className="num">{formatPrice(line.lineTotal)}</td>
                 </tr>

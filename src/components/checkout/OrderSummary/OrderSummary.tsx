@@ -47,7 +47,7 @@ export function OrderSummary({ items, pickupDate, pickupSlot, fulfillmentLabel, 
             <span className={styles.itemText}>
               {item.quantity} × {item.title}
               <span className={styles.itemMeta}>
-                {[item.sizeLabel, ...(item.optionLabels ?? []), item.customText ? `כיתוב: ${item.customText}` : null]
+                {[item.sizeLabel, ...(item.optionLabels ?? []), item.customText ? `הערה: ${item.customText}` : null]
                   .filter(Boolean)
                   .join(" · ")}
               </span>

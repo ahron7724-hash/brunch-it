@@ -152,8 +152,8 @@ export function TrayBuilder({ tray }: TrayBuilderProps) {
         <ChoiceGroup
           name="tray-size"
           legend="גודל המגש"
-          value={sizeId}
-          onChange={changeSize}
+          selected={[sizeId]}
+          onChange={([id]) => id && changeSize(id)}
           choices={tray.sizes.map((s) => ({ id: s.id, label: s.label, note: s.capacity ? `${s.capacity} יחידות` : "כמה שרוצים" }))}
         />
       )}

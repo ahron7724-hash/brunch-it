@@ -36,6 +36,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
         images={product.product_images.map((i) => ({ id: i.id, url: i.url, alt: i.alt ?? "" }))}
         sizes={product.product_sizes.map((s) => ({ id: s.id, label: s.label, price: String(s.price), unitCount: String(s.unit_count), serves: s.serves ?? "" }))}
         options={product.product_options.map((o) => ({ id: o.id, groupName: o.group_name, label: o.label, extraPrice: String(o.extra_price) }))}
+        maxOptionChoices={product.max_option_choices}
       >
         <ProductDetailsFields
           product={product}

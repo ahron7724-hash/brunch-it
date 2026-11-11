@@ -39,6 +39,7 @@ export const productDetailsSchema = z.object({
   primaryCategoryId: z.union([z.literal(""), uuid]),
   allowsCustomText: checkbox,
   customTextLabel: optionalText(80),
+  maxOptionChoices: z.preprocess((v) => (v === "" || v === null || v === undefined ? 1 : v), z.coerce.number().int("כמה אפשרויות: מספר שלם").min(1, "כמה אפשרויות: לפחות 1").max(20, "כמה אפשרויות: עד 20")),
   isActive: checkbox,
   isFeatured: checkbox,
   sortOrder: z.coerce.number().int().min(0).max(10000),

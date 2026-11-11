@@ -66,6 +66,7 @@ const detailSchema = z.object({
   primary_category_id: z.string().uuid().nullable(),
   allows_custom_text: z.boolean(),
   custom_text_label: z.string().nullable(),
+  max_option_choices: z.number().int().min(1).catch(1),
   is_active: z.boolean(),
   is_featured: z.boolean(),
   sort_order: z.number().int(),
@@ -85,7 +86,7 @@ export async function getAdminProduct(id: string): Promise<AdminProduct | null> 
   const { data } = await supabase
     .from("products")
     .select(
-      "id, title, slug, description, contents, min_lead_time_hours, diet_tags, primary_category_id, allows_custom_text, custom_text_label, is_active, is_featured, sort_order, product_images(id, url, alt, sort_order), product_sizes(id, label, price, unit_count, serves, sort_order), product_options(id, group_name, label, extra_price, sort_order, is_active), product_categories(category_id)"
+      "id, title, slug, description, contents, min_lead_time_hours, diet_tags, primary_category_id, allows_custom_text, custom_text_label, max_option_choices, is_active, is_featured, sort_order, product_images(id, url, alt, sort_order), product_sizes(id, label, price, unit_count, serves, sort_order), product_options(id, group_name, label, extra_price, sort_order, is_active), product_categories(category_id)"
     )
     .eq("id", id)
     .maybeSingle();

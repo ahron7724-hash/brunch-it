@@ -32,7 +32,7 @@ export function CartLine({ item, onNavigate }: CartLineProps) {
             {label}
           </p>
         ))}
-        {item.customText && <p className={styles.meta}>כיתוב: {item.customText}</p>}
+        {item.customText && <p className={styles.meta}>הערה: {item.customText}</p>}
         {availability.status === "unavailable" && <p className={styles.warning}>לא יהיה מוכן למועד האיסוף שנבחר</p>}
         <div className={styles.row}>
           <QuantityStepper value={item.quantity} onChange={(q) => setQuantity(item.key, q)} />

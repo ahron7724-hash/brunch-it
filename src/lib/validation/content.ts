@@ -67,6 +67,7 @@ export const productRowSchema = z.object({
   diet_tags: z.array(z.string()).transform((tags) => tags.filter((t): t is DietTag => dietTagSchema.safeParse(t).success)),
   allows_custom_text: z.boolean(),
   custom_text_label: z.string().max(80).nullable(),
+  max_option_choices: z.number().int().min(1).catch(1),
   primary_category_id: z.string().uuid().nullable().catch(null),
   is_featured: z.boolean(),
   sort_order: z.number().int(),

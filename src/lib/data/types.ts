@@ -52,6 +52,8 @@ export type ProductDetail = ProductSummary & {
   optionGroups: ProductOptionGroup[];
   allowsCustomText: boolean;
   customTextLabel: string | null;
+  /** How many options the customer may pick from each group (1 = one choice). */
+  maxOptionChoices: number;
 };
 
 export type Testimonial = {

@@ -116,7 +116,7 @@ const orderRowSchema = z.object({
       product_title: z.string(),
       quantity: z.number().int(),
       unit_count: z.number().int(),
-      options: z.array(z.object({ id: z.string().uuid().optional(), label: z.string() }).passthrough()).catch([]),
+      options: z.array(z.object({ id: z.string().uuid().optional(), label: z.string(), group: z.string().optional() }).passthrough()).catch([]),
     })
   ),
 });
@@ -142,7 +142,7 @@ export async function listActiveOrderLines(from: string, to: string): Promise<Or
       productTitle: item.product_title,
       quantity: item.quantity,
       unitCount: item.unit_count,
-      options: item.options.map((o) => ({ id: o.id ?? null, label: o.label })),
+      options: item.options.map((o) => ({ id: o.id ?? null, label: o.label, group: o.group })),
     }))
   );
 }

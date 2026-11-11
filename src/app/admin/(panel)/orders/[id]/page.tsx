@@ -53,7 +53,7 @@ export default async function OrderPage({ params }: OrderPageProps) {
                   {item.quantity} × {item.product_title} – {item.size_label}
                 </p>
                 {item.options.length > 0 && <p className={styles.meta}>{item.options.map((o) => `${o.group}: ${o.label}`).join(" · ")}</p>}
-                {item.custom_text && <p className={styles.inscription}>כיתוב: {item.custom_text}</p>}
+                {item.custom_text && <p className={styles.inscription}>הערה: {item.custom_text}</p>}
               </div>
               <span className={styles.num}>{formatPrice(item.line_total)}</span>
             </li>

@@ -7,12 +7,12 @@ type CustomTextFieldProps = {
   max: number;
 };
 
-/** Optional free text written on the product (e.g. a cake inscription), with a character counter. */
+/** Optional note on the product (e.g. "בלי זיתים"), with a character counter. */
 export function CustomTextField({ label, value, onChange, max }: CustomTextFieldProps) {
   return (
     <div className={styles.field}>
       <label htmlFor="custom-text" className={styles.legend}>
-        {label ?? "כיתוב אישי"} <span className={styles.optional}>(לא חובה)</span>
+        {label ?? "הערה"} <span className={styles.optional}>(לא חובה)</span>
       </label>
       <input
         id="custom-text"
@@ -20,6 +20,7 @@ export function CustomTextField({ label, value, onChange, max }: CustomTextField
         value={value}
         onChange={(e) => onChange(e.target.value)}
         maxLength={max}
+        placeholder="למשל: בלי זיתים"
         className={styles.input}
         aria-describedby="custom-text-hint"
       />

@@ -48,6 +48,13 @@
   box-shadow: inset 0 0 0 1px var(--color-text);
 }
 
+.choiceDisabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+
+  &:hover { border-color: var(--color-border); }
+}
+
 .choiceLabel { font-weight: var(--weight-medium); }
 
 .choiceNote,

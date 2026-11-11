@@ -5,6 +5,7 @@ import { startTransition, useActionState, useEffect, useState, type FormEvent, t
 import { Panel } from "@/components/admin/Panel/Panel";
 import { ProductImagesField, type ProductImageValue } from "@/components/admin/ProductImagesField/ProductImagesField";
 import { fromEditableRows, RowsField, toEditableRows, type Column } from "@/components/admin/RowsField/RowsField";
+import { Field } from "@/components/ui/Field/Field";
 import type { AdminActionResult } from "@/lib/auth/admin";
 
 import { SaveBar } from "./SaveBar";
@@ -28,12 +29,14 @@ type ProductEditorProps = {
   images: { id: string; url: string; alt: string }[];
   sizes: Record<string, string>[];
   options: Record<string, string>[];
+  /** How many options the customer may pick from each group. */
+  maxOptionChoices: number;
   /** The details fields (rendered on the server), placed inside the same form. */
   children: ReactNode;
 };
 
 /** The whole product page as one form with a single "save product" button. */
-export function ProductEditor({ action, images: savedImages, sizes: savedSizes, options: savedOptions, children }: ProductEditorProps) {
+export function ProductEditor({ action, images: savedImages, sizes: savedSizes, options: savedOptions, maxOptionChoices, children }: ProductEditorProps) {
   const [images, setImages] = useState<ProductImageValue[]>(() => savedImages.map((img) => ({ ...img, _key: img.id })));
   const [sizes, setSizes] = useState(() => toEditableRows(savedSizes));
   const [options, setOptions] = useState(() => toEditableRows(savedOptions));
@@ -96,8 +99,20 @@ export function ProductEditor({ action, images: savedImages, sizes: savedSizes, 
         />
       </Panel>
 
-      <Panel title="טעמים ותוספות" description="הלקוח בוחר אפשרות אחת מכל קבוצה. תוספת 0 = בלי תוספת מחיר. אפשר להשאיר ריק.">
+      <Panel title="טעמים ותוספות" description="תוספת 0 = בלי תוספת מחיר. אפשר להשאיר ריק.">
         <RowsField columns={OPTION_COLUMNS} rows={options} onChange={change(setOptions)} maxRows={30} addLabel="הוספת אפשרות" emptyText="אין טעמים לבחירה במוצר הזה." />
+        <div className={styles.choiceLimit}>
+          <Field
+            id="maxOptionChoices"
+            label="כמה אפשרויות הלקוח יכול לבחור מכל קבוצה"
+            type="number"
+            min={1}
+            max={20}
+            maxLength={2}
+            defaultValue={maxOptionChoices}
+            hint="1 = בחירה אחת בלבד. למשל 3 = הלקוח יכול לבחור עד 3 טעמים (לפחות אחד). בחישוב המלאי המארז מתחלק שווה בין הטעמים שנבחרו."
+          />
+        </div>
       </Panel>
 
       <Panel title="פרטי המוצר">{children}</Panel>

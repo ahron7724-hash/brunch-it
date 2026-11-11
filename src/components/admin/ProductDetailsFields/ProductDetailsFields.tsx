@@ -64,9 +64,9 @@ export function ProductDetailsFields({ product, categories, defaultLeadTimeHours
       </fieldset>
 
       <fieldset className={styles.group}>
-        <legend className={styles.legend}>כיתוב אישי</legend>
-        <Checkbox id="allowsCustomText" name="allowsCustomText" label="הלקוח יכול להוסיף כיתוב" defaultChecked={product.allows_custom_text} />
-        <Field id="customTextLabel" label="כותרת השדה" maxLength={80} required={false} defaultValue={product.custom_text_label ?? ""} hint="למשל: כיתוב על העוגה" />
+        <legend className={styles.legend}>הערה</legend>
+        <Checkbox id="allowsCustomText" name="allowsCustomText" label="הלקוח יכול להוסיף הערה (למשל: בלי זיתים)" defaultChecked={product.allows_custom_text} />
+        <Field id="customTextLabel" label="כותרת השדה" maxLength={80} required={false} defaultValue={product.custom_text_label ?? ""} hint="ריק = הערה. אפשר לשנות, למשל: כיתוב על העוגה" />
       </fieldset>
 
       <fieldset className={styles.group}>

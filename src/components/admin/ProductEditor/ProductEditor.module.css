@@ -3,6 +3,11 @@
   flex-direction: column;
 }
 
+.choiceLimit {
+  max-inline-size: 28rem;
+  margin-block-start: var(--space-5);
+}
+
 .saveBar {
   position: sticky;
   inset-block-end: 0;

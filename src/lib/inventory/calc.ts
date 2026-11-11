@@ -59,7 +59,8 @@ export type OrderLine = {
   quantity: number;
   /** Units in one package. */
   unitCount: number;
-  options: { id: string | null; label: string }[];
+  /** group: e.g. "טעם". Several options of one group split the units between them. */
+  options: { id: string | null; label: string; group?: string }[];
 };
 
 export type PrepStep = {
@@ -75,10 +76,19 @@ export function lineUnits(line: OrderLine): number {
   return line.quantity * line.unitCount;
 }
 
-/** The recipe lines that apply to an order line: the base recipe plus its chosen flavors. */
-function recipeForLine(line: OrderLine, recipes: RecipeLine[]): RecipeLine[] {
-  const chosen = new Set(line.options.flatMap((o) => (o.id ? [o.id] : [])));
-  return recipes.filter((r) => r.productId === line.productId && (r.optionId === null || chosen.has(r.optionId)));
+/**
+ * The recipe lines that apply to an order line (the base recipe plus its chosen flavors), each with
+ * its share of the line's units: 1 for the base; 1/3 for each of 3 flavors chosen in one group.
+ */
+function recipeForLine(line: OrderLine, recipes: RecipeLine[]): { recipe: RecipeLine; share: number }[] {
+  const chosen = line.options.filter((o) => o.id);
+  const share = new Map(chosen.map((o) => [o.id!, 1 / chosen.filter((c) => (c.group ?? "") === (o.group ?? "")).length]));
+  return recipes.flatMap((r) => {
+    if (r.productId !== line.productId) return [];
+    if (r.optionId === null) return [{ recipe: r, share: 1 }];
+    const s = share.get(r.optionId);
+    return s === undefined ? [] : [{ recipe: r, share: s }];
+  });
 }
 
 /**
@@ -91,9 +101,9 @@ export function measuredNeeds(lines: OrderLine[], recipes: RecipeLine[], materia
   for (const line of lines) {
     const units = lineUnits(line);
     const order = perOrder.get(line.orderId) ?? new Map<string, number>();
-    for (const r of recipeForLine(line, recipes)) {
+    for (const { recipe: r, share } of recipeForLine(line, recipes)) {
       if (r.amountPerUnit === null || !measured.has(r.materialId)) continue;
-      order.set(r.materialId, (order.get(r.materialId) ?? 0) + units * r.amountPerUnit);
+      order.set(r.materialId, (order.get(r.materialId) ?? 0) + units * share * r.amountPerUnit);
     }
     perOrder.set(line.orderId, order);
   }
@@ -123,12 +133,12 @@ export function manualNeeds(lines: OrderLine[], recipes: RecipeLine[], materials
   const byMaterial = new Map<string, Map<string, number>>();
   for (const line of lines) {
     const units = lineUnits(line);
-    for (const r of recipeForLine(line, recipes)) {
+    for (const { recipe: r, share } of recipeForLine(line, recipes)) {
       if (!manual.has(r.materialId)) continue;
       const flavor = r.optionId === null ? null : line.options.find((o) => o.id === r.optionId)?.label;
       const label = flavor ? `${line.productTitle} · ${flavor}` : line.productTitle;
       const uses = byMaterial.get(r.materialId) ?? new Map<string, number>();
-      uses.set(label, (uses.get(label) ?? 0) + units);
+      uses.set(label, roundAmount((uses.get(label) ?? 0) + units * share));
       byMaterial.set(r.materialId, uses);
     }
   }

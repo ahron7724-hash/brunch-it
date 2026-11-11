@@ -31,6 +31,7 @@ const productSchema = z.object({
   title: z.string(),
   min_lead_time_hours: z.number().int().nullable(),
   allows_custom_text: z.boolean(),
+  max_option_choices: z.number().int().min(1).catch(1),
   product_sizes: z.array(z.object({ id: z.string().uuid(), label: z.string(), price, unit_count: z.number().int().positive().catch(1) })),
   product_options: z.array(
     z.object({ id: z.string().uuid(), group_name: z.string(), label: z.string(), extra_price: price, is_active: z.boolean() })
@@ -60,7 +61,7 @@ export async function priceOrder(items: OrderItemInput[]): Promise<{ lines: Pric
       ? { data: [], error: null }
       : supabase
           .from("products")
-          .select("id, title, min_lead_time_hours, allows_custom_text, product_sizes(id, label, price, unit_count), product_options(id, group_name, label, extra_price, is_active)")
+          .select("id, title, min_lead_time_hours, allows_custom_text, max_option_choices, product_sizes(id, label, price, unit_count), product_options(id, group_name, label, extra_price, is_active)")
           .eq("is_active", true)
           .in("id", productIds),
     trayIds.length === 0
@@ -94,6 +95,11 @@ export async function priceOrder(items: OrderItemInput[]): Promise<{ lines: Pric
     const options = item.optionIds.map((id) => product.product_options.find((o) => o.id === id && o.is_active));
     if (options.some((o) => o === undefined)) {
       return { error: `אחת האפשרויות שנבחרו עבור "${product.title}" השתנתה. נא להוסיף את המוצר לסל מחדש.` };
+    }
+    const perGroup = new Map<string, number>();
+    for (const o of options) if (o) perGroup.set(o.group_name, (perGroup.get(o.group_name) ?? 0) + 1);
+    if (new Set(item.optionIds).size !== item.optionIds.length || [...perGroup.values()].some((n) => n > product.max_option_choices)) {
+      return { error: `האפשרויות שנבחרו עבור "${product.title}" השתנו. נא להוסיף את המוצר לסל מחדש.` };
     }
     const chosen = options.flatMap((o) => (o ? [{ id: o.id, group: o.group_name, label: o.label, extraPrice: o.extra_price }] : []));
 

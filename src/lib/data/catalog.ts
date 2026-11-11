@@ -12,7 +12,7 @@ type ProductRow = z.infer<typeof productRowSchema>;
 
 const PRODUCT_COLUMNS = `
   id, title, slug, description, contents, min_lead_time_hours, diet_tags,
-  allows_custom_text, custom_text_label, primary_category_id, is_featured, sort_order,
+  allows_custom_text, custom_text_label, max_option_choices, primary_category_id, is_featured, sort_order,
   product_images ( url, alt, sort_order ),
   product_sizes ( id, label, price, serves, sort_order ),
   product_options ( id, group_name, label, extra_price, sort_order, is_active ),
@@ -117,6 +117,7 @@ async function loadProduct(column: "slug" | "id", value: string): Promise<Produc
     optionGroups: groupOptions(parsed.data),
     allowsCustomText: parsed.data.allows_custom_text,
     customTextLabel: parsed.data.custom_text_label,
+    maxOptionChoices: parsed.data.max_option_choices,
   };
 }
 

@@ -25,11 +25,13 @@ type ProductPurchaseProps = {
   onAdded?: () => void;
 };
 
-/** Size, flavor and custom-text selection with a live price, and "add to cart". */
+/** Size, flavors (one or several) and note, with a live price, and "add to cart". */
 export function ProductPurchase({ product, onAdded }: ProductPurchaseProps) {
   const [sizeId, setSizeId] = useState(product.sizes[0]?.id ?? "");
-  const [optionByGroup, setOptionByGroup] = useState<Record<string, string>>(() =>
-    Object.fromEntries(product.optionGroups.flatMap((g) => (g.options[0] ? [[g.name, g.options[0].id]] : [])))
+  const maxChoices = Math.max(1, product.maxOptionChoices);
+  // One choice per group: the first is preselected. Several: the customer picks (at least one).
+  const [optionsByGroup, setOptionsByGroup] = useState<Record<string, string[]>>(() =>
+    Object.fromEntries(product.optionGroups.map((g) => [g.name, maxChoices === 1 && g.options[0] ? [g.options[0].id] : []]))
   );
   const [customText, setCustomText] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -45,15 +47,20 @@ export function ProductPurchase({ product, onAdded }: ProductPurchaseProps) {
 
   const size = product.sizes.find((s) => s.id === sizeId);
   const selectedOptions = product.optionGroups.flatMap((g) =>
-    g.options.filter((o) => o.id === optionByGroup[g.name]).map((o) => ({ ...o, group: g.name }))
+    g.options.filter((o) => optionsByGroup[g.name]?.includes(o.id)).map((o) => ({ ...o, group: g.name }))
   );
   const unitPrice = (size?.price ?? 0) + selectedOptions.reduce((sum, o) => sum + o.extraPrice, 0);
 
   function handleAdd() {
     if (!size) return;
+    const missing = product.optionGroups.find((g) => g.options.length > 0 && !optionsByGroup[g.name]?.length);
+    if (missing) {
+      setStatus({ ok: false, text: `נא לבחור ${missing.name}` });
+      return;
+    }
     const text = customTextSchema.safeParse(customText);
     if (!text.success) {
-      setStatus({ ok: false, text: text.error.issues[0]?.message ?? "הכיתוב אינו תקין" });
+      setStatus({ ok: false, text: text.error.issues[0]?.message ?? "ההערה אינה תקינה" });
       return;
     }
     const optionIds = selectedOptions.map((o) => o.id).sort();
@@ -69,7 +76,11 @@ export function ProductPurchase({ product, onAdded }: ProductPurchaseProps) {
       imageUrl: product.image?.url ?? null,
       customText: text.data || undefined,
       optionIds,
-      optionLabels: selectedOptions.map((o) => `${o.group}: ${o.label}`),
+      // Several flavors of one group on one line: "טעם: שוקולד, וניל".
+      optionLabels: product.optionGroups.flatMap((g) => {
+        const labels = selectedOptions.filter((o) => o.group === g.name).map((o) => o.label);
+        return labels.length > 0 ? [`${g.name}: ${labels.join(", ")}`] : [];
+      }),
       leadTimeHours: product.leadTimeHours,
     };
     // First add-to-cart: the pickup slot must be chosen before the item goes in the cart.
@@ -92,8 +103,8 @@ export function ProductPurchase({ product, onAdded }: ProductPurchaseProps) {
         <ChoiceGroup
           name="size"
           legend="גודל"
-          value={sizeId}
-          onChange={setSizeId}
+          selected={[sizeId]}
+          onChange={([id]) => id && setSizeId(id)}
           choices={product.sizes.map((s) => ({ id: s.id, label: s.label, note: s.serves, price: { amount: s.price, kind: "full" } }))}
         />
       )}
@@ -103,8 +114,12 @@ export function ProductPurchase({ product, onAdded }: ProductPurchaseProps) {
           key={group.name}
           name={`option-${group.name}`}
           legend={group.name}
-          value={optionByGroup[group.name] ?? ""}
-          onChange={(id) => setOptionByGroup((prev) => ({ ...prev, [group.name]: id }))}
+          selected={optionsByGroup[group.name] ?? []}
+          max={maxChoices}
+          onChange={(ids) => {
+            setOptionsByGroup((prev) => ({ ...prev, [group.name]: ids }));
+            setStatus(null);
+          }}
           choices={group.options.map((o) => ({ id: o.id, label: o.label, price: { amount: o.extraPrice, kind: "extra" } }))}
         />
       ))}

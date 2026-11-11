@@ -74,6 +74,16 @@ describe("manualNeeds", () => {
     assert.deepEqual(uses.get("eggplant"), [{ label: "קיש · חציל", units: 35 }]);
   });
 
+  it("splits a box between the flavors chosen in one group", () => {
+    const both = [
+      { id: SWEET_POTATO, label: "בטטה", group: "טעם" },
+      { id: EGGPLANT, label: "חציל", group: "טעם" },
+    ];
+    const uses = manualNeeds([line({ options: both })], recipes, materials);
+    assert.deepEqual(uses.get("potato"), [{ label: "קיש · בטטה", units: 10 }]);
+    assert.deepEqual(uses.get("eggplant"), [{ label: "קיש · חציל", units: 10 }]);
+  });
+
   it("uses only the base recipe when an old order has no flavor ids", () => {
     const uses = manualNeeds([line({ options: [{ id: null, label: "בטטה" }] })], recipes, materials);
     assert.equal(uses.size, 0);
